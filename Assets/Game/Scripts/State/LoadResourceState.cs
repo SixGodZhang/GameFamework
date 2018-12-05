@@ -25,13 +25,16 @@ namespace GameFramework.Taurus
             UnityEngine.Debug.Log("---------call LoadResourceState------------");
 #endif
             base.OnEnter(parameters);
-            string localPath = Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), "AssetVersion.txt");
+            string localPath = Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), CheckResourceState.AssetVersionTxt);
             AssetBundleVersionInfo versionInfo = JsonUtility.FromJson<AssetBundleVersionInfo>(File.ReadAllText(localPath));
 
             //设置AB包的加载方式
             GameMain.ResourceMG.SetResourceHelper(new BundleResourceHelper());
             //设置资源依赖
             GameMain.ResourceMG.SetMainfestAssetBundle(versionInfo.ManifestAssetBundle, versionInfo.IsEncrypt);
+
+            //测试 直接切换到热更新状态里面去
+            ChangeState<PreloadState>();
         }
 
         public override void OnExit()

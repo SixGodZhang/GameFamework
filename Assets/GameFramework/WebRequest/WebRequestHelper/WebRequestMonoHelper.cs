@@ -39,7 +39,6 @@ namespace GameFramework.Taurus
 #if UNITY_EDITOR
             Debug.Log("资源下载地址: " + url);
 #endif
-
             yield return null;
 
             WWW request = new WWW(url);

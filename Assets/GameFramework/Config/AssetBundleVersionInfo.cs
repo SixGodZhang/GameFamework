@@ -18,6 +18,22 @@ namespace GameFramework.Taurus
     {
         public string Name;
         public string MD5;
+
+        public override bool Equals(object obj)
+        {
+            var info = obj as ResourcesInfo;
+            return info != null &&
+                   Name == info.Name &&
+                   MD5 == info.MD5;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1820180183;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(MD5);
+            return hashCode;
+        }
     }
 
     [Serializable]

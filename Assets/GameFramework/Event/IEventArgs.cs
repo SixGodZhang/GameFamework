@@ -13,17 +13,6 @@ using System.Collections.Generic;
 
 namespace GameFramework.Taurus
 {
-    public enum EventType
-    {
-        HttpDownLoadSuccess = 1,
-        HttpDownLoadFailure,
-        LoadAssetAsync,
-        LoadSceneAsync,
-        HttpReadTextSuccess,
-        HttpReadTextFailure,
-        HttpDownLoadProgress,
-    }
-
     public interface IEventArgs
     {
         int Id { get; }

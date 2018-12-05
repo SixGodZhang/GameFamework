@@ -1,1 +1,1 @@
-{"Version":100000,"Platforms":["pc,android,ios"]}
+{"Version":100000,"Platforms":["StandaloneWindows","IOS","Android"]}

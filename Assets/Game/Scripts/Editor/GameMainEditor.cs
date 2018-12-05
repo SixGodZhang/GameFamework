@@ -118,7 +118,7 @@ namespace GameFramework.Taurus
                     break;
                 case ResourceUpdateType.Update:
                     {
-                        _gameMain.LocalPathType = PathType.ReadWrite;
+                        _gameMain.LocalPathType = PathType.ReadOnly;
                         //_gameMain.LocalPathType = (PathType)EditorGUILayout.EnumPopup("Local Path Type", PathType.ReadWrite);
                         _gameMain.ResUpdatePath = EditorGUILayout.TextField("Resources Update Path", _gameMain.ResUpdatePath);
                         EditorGUILayout.LabelField("Path", ResourceManager.GetDeafultPath(_gameMain.LocalPathType));

@@ -9,8 +9,9 @@
 //-----------------------------------------------------------------------
 
 using ATFramework.FileOp;
-using System;
+using ATFramework.Taurus;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 
 namespace GameFramework.Taurus
@@ -27,43 +28,50 @@ namespace GameFramework.Taurus
             {
                 AssetPlatformVersionInfo platforms = new AssetPlatformVersionInfo();
                 platforms.Version = 100000;
-                platforms.Platforms = new List<string>() { "StandaloneWindows,IOS,Android" };
+                platforms.Platforms = new List<string>() { "StandaloneWindows", "IOS", "Android" };
 
                 string platformVersion = EditorJsonUtility.ToJson(platforms);
-                System.IO.File.WriteAllText(System.IO.Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), "AssetPlatformVersion.txt"), platformVersion);
+                System.IO.File.WriteAllText(System.IO.Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), CheckResourceState.AssetPlatformVersionText), platformVersion);
+
+                ATFileOp.ShowExplorerWindow(System.IO.Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), CheckResourceState.AssetPlatformVersionText));
             }
 
             [MenuItem("GameFramework/GenerateAssetVersion")]
             static void GenerateAssetVersionInfo()
             {
-                string dirpath = "";
+                string dirpath = System.IO.Path.Combine(UnityEngine.Application.dataPath.Replace("Assets", ""), "AssetBundles/StandaloneWindows");
                 AssetBundleVersionInfo abversion = new AssetBundleVersionInfo();
                 abversion.IsEncrypt = false;
                 abversion.Version = 10000;
-                abversion.ManifestAssetBundle = "";
+                abversion.ManifestAssetBundle = "StandaloneWindows";
 
                 var infos = new List<ResourcesInfo>();
                 var resources = CalculateMd5(dirpath);
                 foreach (var item in resources)
                 {
                     ResourcesInfo info = new ResourcesInfo();
-                    info.Name = item.Key;
+
+                    info.Name = item.Key.Substring(item.Key.IndexOf("StandaloneWindows")+ "StandaloneWindows".Length + 1).Replace(@"\\","/");
                     info.MD5 = item.Value;
                     infos.Add(info);
                 }
                 abversion.Resources = infos;
 
                 string assetversion = EditorJsonUtility.ToJson(abversion);
-                System.IO.File.WriteAllText(System.IO.Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), "AssetVersion.txt"), assetversion);
+                System.IO.File.WriteAllText(System.IO.Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), CheckResourceState.AssetVersionTxt), assetversion);
+
+                ATFileOp.ShowExplorerWindow(System.IO.Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), CheckResourceState.AssetVersionTxt));
             }
 
             /// <summary>
             /// 计算文件夹下所有文件的Md5值
             /// </summary>
             /// <param name="dirpath"></param>
-            private static List<KeyValuePair<string,string>> CalculateMd5(string dirpath)
+            //[MenuItem("GameFramework/TestPaths")]
+            static List<KeyValuePair<string,string>> CalculateMd5(string dirpath)
             {
-                List<string> paths = ATFileOp.GetFilesInDirectory(dirpath);
+                List<string> paths = new List<string>(Directory.GetFiles(dirpath));
+
                 return Md5Manager.ComputeMd5(paths);
             }
         }

@@ -1,0 +1,18 @@
+ManifestFileVersion: 0
+CRC: 3800196899
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: aec87b3b3ed47ba195a7b2b969e739af
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 51a16e16d5113854a16091e54ae5bb0d
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+Assets:
+- Assets/Example/Materials/SphereMat.mat
+Dependencies: []

@@ -23,6 +23,7 @@ namespace GameFramework.Taurus
         public static ResourceManager ResourceMG;
         public static HotfixManager HotfixMG;
         public static WebRequestManager WebRequestMG;
+        public static UIManager UIMG;
 
         public static System.Reflection.Assembly Assembly { get; private set; }
         #endregion
@@ -53,6 +54,7 @@ namespace GameFramework.Taurus
             ResourceMG = GameModuleProxy.GetModule<ResourceManager>();
             HotfixMG = GameModuleProxy.GetModule<HotfixManager>();
             WebRequestMG = GameModuleProxy.GetModule<WebRequestManager>();
+            UIMG = GameModuleProxy.GetModule<UIManager>();
             #endregion
 
             #region Resource

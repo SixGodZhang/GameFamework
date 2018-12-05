@@ -10,12 +10,30 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine.Networking;
 
 namespace GameFramework.Taurus
 {
+    /// <summary>
+    /// 下载文件类型
+    /// </summary>
+    public enum DownloadFileType
+    {
+        AssetBundle = 0,
+        AudioClip,
+        Buffer,
+        File,
+        MovieTexture,
+        Texture,
+        BPDownload,//自定义的类型(支持断点下载)
+    }
+
     public class WebRequestManager:IGameModule
     {
         #region 属性&字段
+        private DownloadFileType _downloadFileType = DownloadFileType.File;
+
         /// <summary>
         /// 事件管理器
         /// </summary>
@@ -30,16 +48,35 @@ namespace GameFramework.Taurus
         /// Http下载帮助类
         /// </summary>
         private IWebDownloadHelper _webDownloadHelper;
+
+        /// <summary>
+        /// 异步下载任务
+        /// </summary>
+        private List<UnityWebRequestAsyncOperation> _downloadtasks;
+        public List<UnityWebRequestAsyncOperation> DownloadTasks
+        {
+            get { return _downloadtasks; }
+        }
+
         #endregion
 
         #region 构造函数
         public WebRequestManager()
         {
             _event = GameModuleProxy.GetModule<EventManager>();
+            _downloadtasks = new List<UnityWebRequestAsyncOperation>();
         }
         #endregion
 
         #region 外部接口
+        /// <summary>
+        /// 清空下载任务
+        /// </summary>
+        public void ClearDownloadTasks()
+        {
+            _downloadtasks.Clear();
+        }
+
         /// <summary>
         /// 设置Web请求帮助器的类型
         /// </summary>
@@ -74,7 +111,8 @@ namespace GameFramework.Taurus
         /// <param name="localPath"></param>
         public void StartDownload(string remoteUrl, string localPath)
         {
-            _webDownloadHelper?.StartDownLoad(remoteUrl, localPath, StartDownloadCallback, StartDownloadProgress);
+            UnityWebRequestAsyncOperation operation = _webDownloadHelper?.StartDownLoad(remoteUrl, localPath, _downloadFileType, StartDownloadCallback, StartDownloadProgress);
+            _downloadtasks.Add(operation);
         }
         #endregion
 

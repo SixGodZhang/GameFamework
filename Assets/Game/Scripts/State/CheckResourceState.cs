@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace GameFramework.Taurus
@@ -22,12 +23,20 @@ namespace GameFramework.Taurus
         /// <summary>
         /// 平台的资源版本
         /// </summary>
-        private string _assetPlatformVersionText = "AssetPlatformVersion.txt";
+        private const string _assetPlatformVersionText = "AssetPlatformVersion.txt";
+        public static string AssetPlatformVersionText
+        {
+            get { return _assetPlatformVersionText; }
+        }
 
         /// <summary>
         /// 资源版本
         /// </summary>
-        private string _assetVersionTxt = "AssetVersion.txt";
+        private const string _assetVersionTxt = "AssetVersion.txt";
+        public static string AssetVersionTxt
+        {
+            get { return _assetVersionTxt; }
+        }
 
         /// <summary>
         /// 本地版本信息
@@ -48,6 +57,24 @@ namespace GameFramework.Taurus
         /// 下载的资源列表
         /// </summary>
         private Dictionary<string, string> _downloadResources;
+
+        /// <summary>
+        /// 下载成功的资源
+        /// </summary>
+        private List<string> _downloadSuccessResources;
+
+        /// <summary>
+        /// 重新尝试下载的最大次数
+        /// </summary>
+        private const int _RETRYCOUNT = 3;
+
+        /// <summary>
+        /// 当前重试的吃素
+        /// </summary>
+        private int _currentRetryNum = 0;
+
+        private Dictionary<string, int> _retryRecord;
+
         #endregion
 
         #region 重载函数
@@ -61,6 +88,7 @@ namespace GameFramework.Taurus
             GameMain.EventMG.RegisterEvent(EventType.HttpDownLoadFailure, OnHttpDownLoadFailure);
             GameMain.EventMG.RegisterEvent(EventType.HttpDownLoadProgress, OnHttpDownLoadProgress);
 
+            _retryRecord = new Dictionary<string, int>();
             _localVersion = LoadLocalVersion();
             LoadRemoteVersion();
         }
@@ -84,6 +112,7 @@ namespace GameFramework.Taurus
         {
             base.OnInit(context);
             _downloadResources = new Dictionary<string, string>();
+            _downloadSuccessResources = new List<string>();
         }
 
         public override void OnUpdate()
@@ -156,7 +185,7 @@ namespace GameFramework.Taurus
             DownloadProgressEventArgs args = (DownloadProgressEventArgs)e;
 #if UNITY_EDITOR
             Debug.Log(
-    $"path:{args.LocalPath} progress:{args.DownloadProgress} bytes:{args.DownloadBytes} speed:{args.DownloadSpeed}");
+    $"资源下载本地路径:{args.LocalPath} \n 资源下载进度:{args.DownloadProgress} 资源下载大小:{args.DownloadBytes} 资源下载速度:{args.DownloadSpeed}");
 #endif
         }
 
@@ -167,11 +196,28 @@ namespace GameFramework.Taurus
         /// <param name="arg2"></param>
         private void OnHttpDownLoadFailure(object sender, IEventArgs e)
         {
-#if UNITY_EDITOR
             HttpDownloadEventArgs args = (HttpDownloadEventArgs)e;
+#if UNITY_EDITOR
             if (args != null)
-                UnityEngine.Debug.LogError("下载资源失败! \n Url: " + args.Url);
+                UnityEngine.Debug.LogError("下载资源失败! \n Url: " + args.Url + "\n 详细信息: " + args.Error);
 #endif
+            int count = 0;
+            if (_retryRecord.TryGetValue(args.Url, out count))
+            {
+                _retryRecord[args.Url]++;
+                if (count <= _RETRYCOUNT)
+                {
+#if UNITY_EDITOR
+                    Debug.Log("资源: " + args.Url + "第" + count + "次重新下载!");
+#endif
+                    GameMain.WebRequestMG.StartDownload(args.Url, args.LocalPath);
+                }
+            } else
+            {
+                //新增
+                _retryRecord.Add(args.LocalPath, 0);
+            }
+            
         }
 
         /// <summary>
@@ -182,6 +228,11 @@ namespace GameFramework.Taurus
         private void OnHttpDownLoadSuccess(object sender, IEventArgs e)
         {
             HttpDownloadEventArgs args = (HttpDownloadEventArgs)e;
+#if UNITY_EDITOR
+            if (args != null)
+                UnityEngine.Debug.Log("下载资源成功! \n Url: " + args.Url + "\n 详细信息: " + args.Error);
+#endif
+            _downloadSuccessResources.Add(args.Url);
             if (_downloadResources.ContainsKey(args.Url))
                 _downloadResources.Remove(args.Url);
         }
@@ -203,8 +254,8 @@ namespace GameFramework.Taurus
         /// <summary>
         /// 下载版本信息文本成功监听
         /// </summary>
-        /// <param name="arg1"></param>
-        /// <param name="arg2"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnHttpReadTextSuccess(object sender, IEventArgs e)
         {
             HttpReadTextEventArgs args = (HttpReadTextEventArgs)e;
@@ -222,6 +273,12 @@ namespace GameFramework.Taurus
                         //读取远程的文本
                         string remotePath = Path.Combine(GameMain.ResourceMG.ResUpdatePath, _assetVersionTxt);
                         GameMain.WebRequestMG.ReadHttpText(remotePath);
+                    }
+                    else
+                    {
+#if UNITY_EDITOR
+                        UnityEngine.Debug.Log("服务器上不包含当前平台的资源文件!");
+#endif
                     }
                 } else if (args.Url == Path.Combine(GameMain.ResourceMG.ResUpdatePath,_assetVersionTxt))
                 {
@@ -242,6 +299,10 @@ namespace GameFramework.Taurus
                         DownloadResource();
                     }
 
+#if UNITY_EDITOR
+                    Debug.Log(">>>>>资源已经是最新版本了!");
+#endif
+
                     //资源更新完成
                     _resourceUpdateDone = true;
                 }
@@ -253,10 +314,22 @@ namespace GameFramework.Taurus
         /// </summary>
         private void DownloadResource()
         {
+            var downloads = new List<KeyValuePair<string, string>>(); 
+
             foreach (var item in _downloadResources)
             {
-                GameMain.WebRequestMG.StartDownload(item.Key, item.Value);
+                downloads.Add(new KeyValuePair<string, string>(item.Key, item.Value));
+                //GameMain.WebRequestMG.StartDownload(item.Key, item.Value);
             }
+
+            for (int i = 0; i < downloads.Count; i++)
+            {
+                GameMain.WebRequestMG.StartDownload(downloads[i].Key, downloads[i].Value);
+            }
+
+#if UNITY_EDITOR
+            Debug.Log("下载失败的任务数目: " + (_downloadResources.Count - _downloadSuccessResources.Count)+"");
+#endif
         }
 
         /// <summary>
@@ -268,18 +341,30 @@ namespace GameFramework.Taurus
             string localPath = "";
             string localDir = "";
 
-            foreach (var item in _remoteVersion.Resources)
+            if (_localVersion == null || _localVersion.Resources == null)
             {
-                if (_localVersion != null && _localVersion.Resources != null && _localVersion.Resources.Contains(item))
+#if UNITY_EDITOR
+                Debug.LogError("本地资源版本信息为空!");
+#endif
+                return;
+            }
+
+            foreach (var remoteItem in _remoteVersion.Resources)
+            {
+                if (_localVersion.Resources.Contains(remoteItem))
                     continue;
-                remoteUrl = Path.Combine(GameMain.ResourceMG.ResUpdatePath, item.Name);
+
+                remoteUrl = Path.Combine(GameMain.ResourceMG.ResUpdatePath, remoteItem.Name);
                 //获取本地文件路径
-                localPath = Path.Combine(GameMain.ResourceMG.LocalPath, item.Name);
+                localPath = Path.Combine(GameMain.ResourceMG.LocalPath, remoteItem.Name);
 
                 localDir = Path.GetDirectoryName(localPath);
                 if (!Directory.Exists(localDir))
                     Directory.CreateDirectory(localDir);
 
+#if UNITY_EDITOR
+                Debug.Log("更新资源列表: " + remoteItem.Name + "\n URL: " + remoteUrl);
+#endif
                 _downloadResources.Add(remoteUrl, localPath);
             }
         }
@@ -298,7 +383,7 @@ namespace GameFramework.Taurus
 #elif UNITY_STANDALONE_OSX
                 platformName = "StandaloneOSX";
 #endif
-            return platformName.ToLower();
+            return platformName;
         }
         #endregion
     }

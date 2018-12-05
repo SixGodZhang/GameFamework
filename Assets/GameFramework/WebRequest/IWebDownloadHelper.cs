@@ -10,6 +10,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine.Networking;
 
 namespace GameFramework.Taurus
 {
@@ -22,6 +24,6 @@ namespace GameFramework.Taurus
         /// <param name="localPath"></param>
         /// <param name="result"></param>
         /// <param name="progress"></param>
-        void StartDownLoad(string remoteUrl, string localPath, Action<string, string, bool, string> result, Action<string, string, ulong, float, float> progress);
+        UnityWebRequestAsyncOperation StartDownLoad(string remoteUrl, string localPath, DownloadFileType type, Action<string, string, bool, string> result, Action<string, string, ulong, float, float> progress);
     }
 }

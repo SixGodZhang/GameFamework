@@ -14,7 +14,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace GameFramework.Taurus
+namespace ATFramework.Taurus
 {
     /// <summary>
     /// Md5工具类
@@ -50,8 +50,11 @@ namespace GameFramework.Taurus
 
             List<KeyValuePair<string, string>> md5Dict =new List<KeyValuePair<string, string>>();
             StringBuilder sb = new StringBuilder();
+            int total = ((List<string>)filePaths).Count;
+            int init = 0;
             foreach (var item in filePaths)
             {
+                UnityEditorTool.ShowProgressBar(init / (total * 1.0f), total, "正在计算:" + item + " MD5值,请稍后...");
                 using (FileStream fs = new FileStream(item, FileMode.Open))
                 {
                     sb.Clear();
@@ -65,6 +68,8 @@ namespace GameFramework.Taurus
                     md5Dict.Add(new KeyValuePair<string, string>(item, sb.ToString()));
                 }
             }
+
+            UnityEditorTool.ClearProgressBar();
 
             md5.Clear();
 
