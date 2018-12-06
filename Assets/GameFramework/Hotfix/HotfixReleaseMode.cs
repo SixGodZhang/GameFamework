@@ -8,6 +8,7 @@
 // <time> #2018/12/6 星期四 12:42:52# </time>
 //-----------------------------------------------------------------------
 
+using ILRuntime.Runtime.Adaptors;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,11 +64,11 @@ namespace GameFramework.Taurus
         /// 进入热更代码
         /// </summary>
         /// <param name="type"></param>
-        public void EnterHotfix(ResourceManager rm)
+        public bool EnterHotfix(ResourceManager rm)
         {
-            HotFixPath path = HotfixManager.GetDLLAndPdbPath(rm.ResUpdateType);
+            HotFixPath? path = HotfixManager.HotFixPath;
             //加载热更代码,此处根据资源管理的加载资源的方式确定加载AB文件还是bytes文件
-            LoadHotFixCode(rm, path.DllPath, path.PdbPath);
+            return LoadHotFixCode(rm, path?.DllPath, path?.PdbPath);
         }
 
         /// <summary>
@@ -102,16 +103,26 @@ namespace GameFramework.Taurus
         /// <summary>
         /// 加载热更代码
         /// </summary>
-        private void LoadHotFixCode(ResourceManager rm, string dllpath,string pdbpath)
+        private bool LoadHotFixCode(ResourceManager rm, string dllpath,string pdbpath)
         {
             //资源加载
-            byte[] dll = rm.LoadAsset<TextAsset>("hotfix", dllpath).bytes;
+            byte[] dll = rm.LoadAsset<TextAsset>("hotfixdll.ab", dllpath).bytes;
+            if (dll == null)
+            {
+#if UNITY_EDITOR
+                UnityEngine.Debug.Log("load hotfix code dll fail!");
+                return false;
+#endif
+            }
             byte[] pdb = null;
 #if UNITY_EDITOR
-            pdb = rm.LoadAsset<TextAsset>("hotfix", pdbpath).bytes;
+            //pdb不是AB文件,单独流程加载
+            pdb = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>(pdbpath).bytes;
             Appdomain.DebugService.StartDebugService(56000);
 #endif
             LoadHotfixAssembly(dll, pdb);
+
+            return true;
         } 
 
         /// <summary>
@@ -148,6 +159,7 @@ namespace GameFramework.Taurus
                     ((Action<System.Object, ILRuntime.Runtime.Intepreter.ILTypeInstance>)act)(sender, e);
                 });
             });
+            Appdomain.RegisterCrossBindingAdaptor(new SubMonoBehaviourAdaper());
         }
 
         #region 周期函数

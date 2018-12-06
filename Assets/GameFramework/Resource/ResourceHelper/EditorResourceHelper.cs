@@ -26,6 +26,7 @@ namespace GameFramework.Taurus
 
         public T LoadAsset<T>(string assetbundlename, string assetname) where T : UnityEngine.Object
         {
+            Debug.Log("assetname: " + assetname);
             return AssetDatabase.LoadAssetAtPath<T>(assetname);
         }
 

@@ -37,6 +37,8 @@ namespace ILRuntime.Runtime.Adaptors
             ILTypeInstance instance;
             ILRuntime.Runtime.Enviorment.AppDomain appdomain;
 
+
+
             bool isToStringGot;
             IMethod toString;
 

@@ -18,6 +18,7 @@ namespace GameFramework.Taurus
         private bool _nodeDataModule = true;
         private bool _stepModule = true;
         private bool _settingModule = true;
+        private bool _hotfixModule = true;
 
         ////Color.cyan;
         private Color _defaultColor;
@@ -39,6 +40,9 @@ namespace GameFramework.Taurus
 
         //步骤模块的颜色
         private Color _stepColor = new Color(0.439f, 0.631f, 0.624f, 1.0f);
+
+        //热更模块的颜色
+        private Color _hotfixColor = new Color(0.989f, 0.631f, 0.624f, 1.0f);
 
         //调试模块的颜色
         private Color _debugColor = new Color(1f, 0.100f, 0.888f, 1.0f);
@@ -96,6 +100,29 @@ namespace GameFramework.Taurus
                 DrawGameStateGUI();
             GUILayout.EndVertical();
             #endregion
+
+            #region 热更模块
+            GUI.color = _hotfixColor;
+            GUILayout.BeginVertical("Box");
+            GUI.color = _defaultColor;
+            GUILayout.BeginHorizontal();
+            GUILayout.Space(12);
+            _hotfixModule = EditorGUILayout.Foldout(_hotfixModule, "Hotfix Module", true);
+            GUILayout.EndHorizontal();
+            if (_hotfixModule)
+                DrawHotFixGUI();
+            GUILayout.EndVertical();
+            #endregion
+        }
+
+        /// <summary>
+        /// 绘制热更模块的界面
+        /// </summary>
+        private void DrawHotFixGUI()
+        {
+            GUILayout.BeginVertical("Box");
+            _gameMain.UseHotFix = EditorGUILayout.Toggle("Use Hotfix", _gameMain.UseHotFix);
+            GUILayout.EndVertical();
         }
 
         /// <summary>

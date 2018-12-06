@@ -1,0 +1,10 @@
+ManifestFileVersion: 0
+CRC: 1805728596
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: hotfixdll.ab
+      Dependencies: {}
+    Info_1:
+      Name: hotfixpdb.ab
+      Dependencies: {}

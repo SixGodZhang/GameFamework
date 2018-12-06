@@ -18,15 +18,37 @@ namespace GameFramework.Taurus
     #region 数据结构
     public struct HotFixPath
     {
+        public string DllABPath { get; set; }
         public string DllPath { get; set; }
+        public string MdbPath { get; set; }
         public string PdbPath { get; set; }
     }
     #endregion
 
-    public class HotfixManager : IGameModule, IUpdate, IFixedUpdate,IApplicationQuit
+    public class HotfixManager : IGameModule, IUpdate, IFixedUpdate, IApplicationQuit
     {
         #region 字段&属性
         public AppDomain Appdomain { get; private set; }
+
+        /// <summary>
+        /// 热更代码&调试文件的路径
+        /// </summary>
+        private static HotFixPath? _hotFixPath = null;
+        public static HotFixPath? HotFixPath
+        {
+            get {
+                if (_hotFixPath == null)
+                {
+                    HotFixPath hotFixPath = new HotFixPath();
+
+                    hotFixPath.DllPath = "Assets/Game/HotFix/Hotfixdll.bytes";
+                    hotFixPath.MdbPath = "Assets/Game/HotFix/Hotfix.dll.mdb";
+                    hotFixPath.PdbPath = "Assets/Game/HotFix/Hotfix.dll.pdb";
+                    _hotFixPath = (HotFixPath?)hotFixPath;
+                }
+                return _hotFixPath;
+            }
+        }
 
         /// <summary>
         /// 是否使用热更代码
@@ -61,31 +83,8 @@ namespace GameFramework.Taurus
             else
                 mode = new HotfixDevMode();
 
-            mode.EnterHotfix(rm);
-            if (mode != null)
+            if (mode != null && mode.EnterHotfix(rm))
                 mode.Start();
-        }
-
-        /// <summary>
-        /// 获取本地DLL和ab的路径
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        public static HotFixPath GetDLLAndPdbPath(ResourceUpdateType type)
-        {
-            HotFixPath hotFixPath = new HotFixPath();
-            if (type == ResourceUpdateType.Editor)
-            {
-                hotFixPath.DllPath = "Assets/Game/HotFix/HotFix.dll.bytes";
-                hotFixPath.PdbPath = "Assets/Game/HotFix/HotFix.pdb.bytes";
-            }
-            else
-            {
-                hotFixPath.DllPath = "Assets/StreamingAssets/HotFix.dll.bytes.ab";
-                hotFixPath.PdbPath = "Assets/StreamingAssets/HotFix.pdb.bytes.ab";
-            }
-
-            return hotFixPath;
         }
         #endregion
 

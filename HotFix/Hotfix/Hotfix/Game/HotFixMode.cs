@@ -8,32 +8,38 @@
 // <time> #2018/12/3 星期一 16:58:52# </time>
 //-----------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-
 namespace HotFix.Taurus
 {
-    public class HotFixMode
+    public class HotFixMode: SubMonoBehavior
     {
         public HotFixMode()
         {
             UnityEngine.Debug.Log("-------------------Start Hotfix Code-------------------");
         }
 
-        public void Update()
+        public override void OnApplicationQuit()
         {
-
+            UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.OnApplicationQuit() -------------------");
         }
 
-        public void FixedUpdate()
+        public override void OnDestroy()
         {
-
+            UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.OnDestroy() -------------------");
         }
 
-        public void OnClose()
+        public override void OnFixedUpdate()
         {
+            UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.OnFixedUpdate() -------------------");
+        }
 
+        public override void Start()
+        {
+            UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.Start() -------------------");
+        }
+
+        public override void Update()
+        {
+            UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.Update() -------------------");
         }
     }
 }

@@ -70,6 +70,7 @@ namespace GameFramework.Taurus
                 if (!File.Exists(bundlePath))
                     throw new Exception("AssetBundle not found!" + bundlePath);
                 bundle = LoadAssetBundle(bundlePath);
+
                 //获取bundle所有的依赖项
                 string[] assetNames = bundle.isStreamedSceneAssetBundle ? bundle.GetAllScenePaths() : bundle.GetAllAssetNames();
 

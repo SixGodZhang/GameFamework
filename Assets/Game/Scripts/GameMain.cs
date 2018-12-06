@@ -63,6 +63,8 @@ namespace GameFramework.Taurus
             #endregion
 
             #region Hotfix
+            //是否使用热更的方式加载代码
+            HotfixMG.UseHotFix = UseHotFix;
             #endregion
 
             #region Resource

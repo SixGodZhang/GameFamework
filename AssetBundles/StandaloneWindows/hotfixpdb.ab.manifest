@@ -1,0 +1,16 @@
+ManifestFileVersion: 0
+CRC: 3110708778
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 5f80faabd0202282d938fb4287a6088c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5ad585dd02dfb5016c0dad519eab8f49
+HashAppended: 0
+ClassTypes:
+- Class: 49
+  Script: {instanceID: 0}
+Assets:
+- Assets/Game/Hotfix/Hotfixpdb.bytes
+Dependencies: []

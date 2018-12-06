@@ -19,7 +19,8 @@ namespace GameFramework.Taurus
         /// 进入逻辑代码
         /// </summary>
         /// <param name="rm"></param>
-        void EnterHotfix(ResourceManager rm);
+        /// <returns></returns>
+        bool EnterHotfix(ResourceManager rm);
 
         void Start();
 

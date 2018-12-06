@@ -8,29 +8,26 @@
 // <time> #2018/12/6 星期四 14:57:57# </time>
 //-----------------------------------------------------------------------
 
-namespace GameFramework.Taurus
+public abstract class SubMonoBehavior
 {
-    public abstract class SubMonoBehavior
-    {
-        /// <summary>
-        /// 开始函数
-        /// </summary>
-        public abstract void Start();
-        /// <summary>
-        /// 渲染帧函数
-        /// </summary>
-        public abstract void Update();
-        /// <summary>
-        /// 固定帧函数
-        /// </summary>
-        public abstract void OnFixedUpdate();
-        /// <summary>
-        /// 销毁函数
-        /// </summary>
-        public abstract void OnDestroy();
-        /// <summary>
-        /// 退出函数
-        /// </summary>
-        public abstract void OnApplicationQuit();
-    }
+    /// <summary>
+    /// 开始函数
+    /// </summary>
+    public abstract void Start();
+    /// <summary>
+    /// 渲染帧函数
+    /// </summary>
+    public abstract void Update();
+    /// <summary>
+    /// 固定帧函数
+    /// </summary>
+    public abstract void OnFixedUpdate();
+    /// <summary>
+    /// 销毁函数
+    /// </summary>
+    public abstract void OnDestroy();
+    /// <summary>
+    /// 退出函数
+    /// </summary>
+    public abstract void OnApplicationQuit();
 }
