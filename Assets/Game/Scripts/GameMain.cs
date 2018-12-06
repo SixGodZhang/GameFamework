@@ -45,6 +45,11 @@ namespace GameFramework.Taurus
         /// </summary>
         public bool DebugEnable = true;
 
+        /// <summary>
+        /// 是否使用热更代码
+        /// </summary>
+        public bool UseHotFix = true;
+
         IEnumerator Start()
         {
             DontDestroyOnLoad(gameObject);
@@ -55,6 +60,9 @@ namespace GameFramework.Taurus
             HotfixMG = GameModuleProxy.GetModule<HotfixManager>();
             WebRequestMG = GameModuleProxy.GetModule<WebRequestManager>();
             UIMG = GameModuleProxy.GetModule<UIManager>();
+            #endregion
+
+            #region Hotfix
             #endregion
 
             #region Resource
@@ -87,11 +95,6 @@ namespace GameFramework.Taurus
 
         }
 
-        private void OnHttpDownLoad(object arg1, IEventArgs arg2)
-        {
-            //....
-        }
-
         private void Update()
         {
             GameModuleProxy.Update();
@@ -105,6 +108,11 @@ namespace GameFramework.Taurus
         private void OnDestroy()
         {
             GameModuleProxy.ShutDownAll();
+        }
+
+        private void OnApplicationQuit()
+        {
+            GameModuleProxy.OnAppilicationQuit();
         }
     }
 }

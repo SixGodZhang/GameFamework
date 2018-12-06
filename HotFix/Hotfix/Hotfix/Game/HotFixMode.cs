@@ -20,5 +20,20 @@ namespace HotFix.Taurus
         {
             UnityEngine.Debug.Log("-------------------Start Hotfix Code-------------------");
         }
+
+        public void Update()
+        {
+
+        }
+
+        public void FixedUpdate()
+        {
+
+        }
+
+        public void OnClose()
+        {
+
+        }
     }
 }

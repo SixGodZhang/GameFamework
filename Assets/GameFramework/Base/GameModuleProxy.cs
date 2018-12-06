@@ -22,6 +22,8 @@ namespace GameFramework.Taurus
         private static List<IUpdate> _allUpdates = new List<IUpdate>();
         //所有固定渲染帧函数
         private static List<IFixedUpdate> _allFixedUpdates = new List<IFixedUpdate>();
+        //所有退出函数
+        private static List<IApplicationQuit> _allApplicationQuits = new List<IApplicationQuit>();
         #endregion
 
         #region 外部接口
@@ -68,6 +70,15 @@ namespace GameFramework.Taurus
             foreach (var item in _allFixedUpdates)
                 item.OnFixedUpdate();
         }
+
+        /// <summary>
+        /// 退出应用
+        /// </summary>
+        public static void OnAppilicationQuit()
+        {
+            foreach (var item in _allApplicationQuits)
+                item.OnApplicationQuit();
+        }
         #endregion
 
         #region 内部函数
@@ -86,6 +97,11 @@ namespace GameFramework.Taurus
             var fixedUpdate = gameModule as IFixedUpdate;
             if (fixedUpdate != null)
                 _allFixedUpdates.Add(fixedUpdate);
+
+            //获取所有退出应用的模块
+            var applicationquit = gameModule as IApplicationQuit;
+            if (applicationquit != null)
+                _allApplicationQuits.Add(applicationquit);
 
             return gameModule;
         }

@@ -17,9 +17,6 @@ namespace GameFramework.Taurus
     [GameState(GameStateType.Generanal, Desc: "加载热更新")]
     public class LoadHotfixState : GameState
     {
-        private const string _DLLPATH = "Assets/Game/HotFix/HotFix.dll.bytes";
-        private const string _PDBPATH = "Assets/Game/HotFix/HotFix.pdb.bytes";
-
         #region 重写函数
         public override void OnEnter(params object[] parameters)
         {
@@ -27,8 +24,9 @@ namespace GameFramework.Taurus
             UnityEngine.Debug.Log("---------call LoadHotfixState------------");
 #endif
             base.OnEnter(parameters);
-            //加载热更代码
-            LoadHotFixCode();
+
+            //初始化热更
+            GameMain.HotfixMG.Init(GameMain.ResourceMG);
         }
 
         public override void OnExit()
@@ -49,20 +47,6 @@ namespace GameFramework.Taurus
         public override void OnUpdate()
         {
             base.OnUpdate();
-        }
-        #endregion
-
-        #region 内部函数
-        private void LoadHotFixCode()
-        {
-            //资源加载
-            byte[] dll = GameMain.ResourceMG.LoadAsset<TextAsset>("hotfix", _DLLPATH).bytes;
-            byte[] pdb = null;
-#if UNITY_EDITOR
-            pdb = GameMain.ResourceMG.LoadAsset<TextAsset>("hotfix", _PDBPATH).bytes;
-            GameMain.HotfixMG.Appdomain.DebugService.StartDebugService(56000);
-#endif
-            GameMain.HotfixMG.LoadHotfixAssembly(dll, pdb);
         }
         #endregion
     }
