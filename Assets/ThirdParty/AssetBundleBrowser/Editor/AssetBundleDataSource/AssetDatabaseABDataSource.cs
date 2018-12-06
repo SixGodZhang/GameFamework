@@ -84,6 +84,18 @@ namespace AssetBundleBrowser.AssetBundleDataSource
                 return false;
             }
 
+            //Debug.Log("suffix: " + info.suffix);
+            //设置所有Assetbundle的尾缀
+            foreach (var assetBundleName in AssetDatabase.GetAllAssetBundleNames())
+            {
+                foreach (var item in AssetDatabase.GetAssetPathsFromAssetBundle(assetBundleName))
+                {
+                    AssetImporter asset = AssetImporter.GetAtPath(item);
+                    asset.assetBundleVariant = "ab";
+                    //Debug.Log(asset.assetBundleVariant);
+                }
+            }
+
             var buildManifest = BuildPipeline.BuildAssetBundles(info.outputDirectory, info.options, info.buildTarget);
             if (buildManifest == null)
             {

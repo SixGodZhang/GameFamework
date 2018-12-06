@@ -9,6 +9,16 @@ namespace AssetBundleBrowser.AssetBundleDataSource
     public partial class ABBuildInfo
     {
         /// <summary>
+        /// AssetBundle后缀名
+        /// </summary>
+        private string _suffix;
+        public string suffix
+        {
+            get { return _suffix; }
+            set { _suffix = value; }
+        }
+
+        /// <summary>
         /// Directory to place build result
         /// </summary>
         public string outputDirectory

@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1755051599
+CRC: 1368323025
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 19ed9719b842ce59ac531103c8bbd769
+    Hash: 153f6860691bbb6340211c41c10b0dd6
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 8f40dda791caeb85ec68635dfd3a9593
+    Hash: 111bbdbfa04cb44e3af81a3c8b56cb70
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -21,9 +21,10 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 43
   Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
 Assets:
 - Assets/Example/Prefabs/Cube.prefab
-Dependencies:
-- E:/Unity2018Project/GameFamework/AssetBundles/StandaloneWindows/cubemat
+Dependencies: []

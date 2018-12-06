@@ -217,7 +217,15 @@ namespace AssetBundleBrowser
                 //    m_OutputPath = EditorUserBuildSettings.GetPlatformSettings(EditorUserBuildSettings.activeBuildTarget.ToString(), "AssetBundleOutputPath");
                 GUILayout.EndHorizontal();
                 EditorGUILayout.Space();
-
+                GUILayout.BeginHorizontal();
+                m_UserData.m_suffix = "ab";
+                var suffix = EditorGUILayout.TextField("suffix", m_UserData.m_suffix);
+                if (System.String.IsNullOrWhiteSpace(suffix))
+                {
+                    m_UserData.m_suffix = suffix;
+                }
+                GUILayout.EndHorizontal();
+                EditorGUILayout.Space();
                 newState = GUILayout.Toggle(
                     m_ForceRebuild.state,
                     m_ForceRebuild.content);
@@ -345,6 +353,7 @@ namespace AssetBundleBrowser
 
             ABBuildInfo buildInfo = new ABBuildInfo();
 
+            buildInfo.suffix = m_UserData.m_suffix;
             buildInfo.outputDirectory = m_UserData.m_OutputPath;
             buildInfo.options = opt;
             buildInfo.buildTarget = (BuildTarget)m_UserData.m_BuildTarget;
@@ -453,6 +462,7 @@ namespace AssetBundleBrowser
             internal List<string> m_OnToggles;
             internal ValidBuildTarget m_BuildTarget = ValidBuildTarget.StandaloneWindows;
             internal CompressOptions m_Compression = CompressOptions.StandardCompression;
+            internal string m_suffix = string.Empty;
             internal string m_OutputPath = string.Empty;
             internal bool m_UseDefaultPath = true;
         }
