@@ -3,7 +3,7 @@
 // <copyright>
 //     Copyright (c) 2018 Zhang Hui. All rights reserved.
 // </copyright>
-// <describe> ## </describe>
+// <describe> #热更代码入口# </describe>
 // <email> whdhxyzh@gmail.com </email>
 // <time> #2018/12/3 星期一 16:58:52# </time>
 //-----------------------------------------------------------------------

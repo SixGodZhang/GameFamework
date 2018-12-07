@@ -36,14 +36,18 @@ namespace GameFramework.Taurus
                 ATFileOp.ShowExplorerWindow(System.IO.Path.Combine(ResourceManager.GetDeafultPath(PathType.ReadOnly), CheckResourceState.AssetPlatformVersionText));
             }
 
+            /// <summary>
+            /// 生成资源版本信息
+            /// </summary>
             [MenuItem("GameFramework/GenerateAssetVersion")]
             static void GenerateAssetVersionInfo()
             {
-                string dirpath = System.IO.Path.Combine(UnityEngine.Application.dataPath.Replace("Assets", ""), "AssetBundles/StandaloneWindows");
+                string platform = GameFrameworkCommon.GetPlatformName();
+                string dirpath = System.IO.Path.Combine(UnityEngine.Application.dataPath.Replace("Assets", ""), "AssetBundles/"+ platform);
                 AssetBundleVersionInfo abversion = new AssetBundleVersionInfo();
                 abversion.IsEncrypt = false;
                 abversion.Version = 10000;
-                abversion.ManifestAssetBundle = "StandaloneWindows";
+                abversion.ManifestAssetBundle = platform;
 
                 var infos = new List<ResourcesInfo>();
                 var resources = CalculateMd5(dirpath);
@@ -51,7 +55,7 @@ namespace GameFramework.Taurus
                 {
                     ResourcesInfo info = new ResourcesInfo();
 
-                    info.Name = item.Key.Substring(item.Key.IndexOf("StandaloneWindows")+ "StandaloneWindows".Length + 1).Replace(@"\\","/");
+                    info.Name = item.Key.Substring(item.Key.IndexOf(platform) + platform.Length + 1).Replace(@"\\","/");
                     info.MD5 = item.Value;
                     infos.Add(info);
                 }

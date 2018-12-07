@@ -159,7 +159,9 @@ namespace GameFramework.Taurus
                     ((Action<System.Object, ILRuntime.Runtime.Intepreter.ILTypeInstance>)act)(sender, e);
                 });
             });
-            Appdomain.RegisterCrossBindingAdaptor(new SubMonoBehaviourAdaper());
+
+            //注册一些适配器
+            AdapterRegister.RegisterCrossBindingAdaptor(Appdomain);
         }
 
         #region 周期函数

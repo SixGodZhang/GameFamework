@@ -264,7 +264,7 @@ namespace GameFramework.Taurus
                 if (args.Url == Path.Combine(GameMain.ResourceMG.ResUpdatePath, _assetPlatformVersionText))
                 {
                     AssetPlatformVersionInfo assetPlatform = JsonUtility.FromJson<AssetPlatformVersionInfo>(args.Additive);
-                    string platformName = GetPlatformName();
+                    string platformName = GameFrameworkCommon.GetPlatformName();
                     if (assetPlatform.Platforms.Contains(platformName))
                     {
                         //资源的更新路径
@@ -369,22 +369,7 @@ namespace GameFramework.Taurus
             }
         }
 
-        /// <summary>
-        /// 获取当前平台名称
-        /// </summary>
-        /// <returns></returns>
-        private string GetPlatformName()
-        {
-            string platformName = "StandaloneWindows";
-#if UNITY_IOS
-                platformName = "IOS";
-#elif UNITY_ANDROID
-                platformName = "Android";
-#elif UNITY_STANDALONE_OSX
-                platformName = "StandaloneOSX";
-#endif
-            return platformName;
-        }
+
         #endregion
     }
 }
