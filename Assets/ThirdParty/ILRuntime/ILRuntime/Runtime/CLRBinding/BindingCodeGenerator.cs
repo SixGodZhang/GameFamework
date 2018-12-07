@@ -66,7 +66,46 @@ namespace ILRuntime.Runtime.Generated
                     string typeDef = string.Format("            Type type = typeof({0});", realClsName);
 
                     MethodInfo[] methods = i.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+                    //过滤:
+                    //说明:过滤一些在黑名单中和一些有特殊(返回值或者参数类型)的方法成员，比如Intptr等
+                    methods = methods.ToList().FindAll((methodInfo) =>
+                    {
+                        bool hr = methodInfo.GetCustomAttributes(typeof(ObsoleteAttribute), true).Length > 0 ||
+                        MethodBindingGenerator.IsMethodPtrType(methodInfo) ||
+                        GeneratorConfig.SpecialBlackTypeList.Exists((_list) =>
+                        {
+                            string _class = _list[0];
+                            string _name = _list[1];
+                            if (i.FullName.Contains(_class))
+                            {
+                                return methodInfo.Name.Contains(_name);
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        });
+                        return !hr;
+                    }).ToArray();
                     FieldInfo[] fields = i.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+                    //过滤:
+                    //说明:过滤一些在黑名单中和一些特殊的字段
+                    fields = fields.ToList().FindAll((field) =>
+                    {
+                        bool hr = field.GetCustomAttributes(typeof(ObsoleteAttribute), true).Length > 0 ||
+                        GeneratorConfig.SpecialBlackTypeList.Exists((_list) =>
+                        {
+                            string _class = _list[0];
+                            string _name = _list[1];
+                            if (i.FullName.Contains(_class))
+                            {
+                                return field.Name.Contains(_name);
+                            }
+                            return false;
+                        });
+                        return !hr;
+                    }).ToArray();
+
                     string registerMethodCode = i.GenerateMethodRegisterCode(methods, excludeMethods);
                     string registerFieldCode = i.GenerateFieldRegisterCode(fields, excludeFields);
                     string registerValueTypeCode = i.GenerateValueTypeRegisterCode(realClsName);
@@ -230,6 +269,10 @@ namespace ILRuntime.Runtime.Generated
                     string typeDef = string.Format("            Type type = typeof({0});", realClsName);
 
                     MethodInfo[] methods = info.Value.Methods.ToArray();
+                    foreach (var method in methods)
+                    {
+                        UnityEngine.Debug.Log(method);
+                    }
                     FieldInfo[] fields = info.Value.Fields.ToArray();
                     string registerMethodCode = i.GenerateMethodRegisterCode(methods, excludeMethods);
                     string registerFieldCode = fields.Length > 0 ? i.GenerateFieldRegisterCode(fields, excludeFields) : null;

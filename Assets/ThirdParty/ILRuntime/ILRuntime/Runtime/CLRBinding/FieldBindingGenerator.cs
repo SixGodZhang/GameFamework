@@ -79,7 +79,7 @@ namespace ILRuntime.Runtime.CLRBinding
                         }
                         else
                         {
-                            sb.AppendLine(string.Format("            (({0})o).{1} = ({2})v;", typeClsName, i.Name, realClsName));
+                            sb.AppendLine(string.Format("{0} _o = ({1})o;\r\n    _o.{2} = ({3})v;", typeClsName, typeClsName, i.Name, realClsName));
                         }
                     }
                     sb.AppendLine("        }");

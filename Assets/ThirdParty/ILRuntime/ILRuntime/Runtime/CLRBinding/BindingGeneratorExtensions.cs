@@ -337,7 +337,7 @@ namespace ILRuntime.Runtime.CLRBinding
                     sb.AppendLine("            *(ulong*)&__ret->Value = result_of_this_method;");
                 }
                 else
-                    throw new NotImplementedException();
+                    throw new NotImplementedException("type name: " + type.FullName);
                 sb.AppendLine("            return __ret + 1;");
 
             }

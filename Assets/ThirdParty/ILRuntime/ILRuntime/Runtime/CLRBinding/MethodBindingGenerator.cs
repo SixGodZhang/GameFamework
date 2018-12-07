@@ -9,6 +9,36 @@ namespace ILRuntime.Runtime.CLRBinding
 {
     static class MethodBindingGenerator
     {
+        #region 自定义修改部分
+        /// <summary>
+        /// 判断方法的返回值和参数是否含有Intptr
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public static bool IsMethodPtrType(MethodInfo t)
+        {
+            if (t.ReturnType != null)
+            {
+                if (t.ReturnType == typeof(IntPtr) || t.ReturnType == typeof(UIntPtr))
+                {
+                    return true;
+                }
+            }
+            var _params = t.GetParameters();
+            if (_params != null)
+            {
+                foreach (var _param in _params)
+                {
+                    if (_param.ParameterType == typeof(IntPtr) || _param.ParameterType == typeof(UIntPtr))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        #endregion
+
         internal static string GenerateMethodRegisterCode(this Type type, MethodInfo[] methods, HashSet<MethodBase> excludes)
         {
             StringBuilder sb = new StringBuilder();

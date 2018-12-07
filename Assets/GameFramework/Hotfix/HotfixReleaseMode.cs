@@ -146,7 +146,7 @@ namespace GameFramework.Taurus
         private void InitializeILRuntime()
         {
             //CLR绑定
-            ILRuntime.Runtime.Generated.CLRBindings.Initialize(Appdomain);
+            //ILRuntime.Runtime.Generated.CLRBindings.Initialize(Appdomain);
 
             //注册一些委托
             Appdomain.DelegateManager.RegisterMethodDelegate<System.Object>();
