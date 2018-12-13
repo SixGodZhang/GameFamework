@@ -41,6 +41,12 @@ namespace HotFix.Taurus
 
         public override void Start()
         {
+            int a = 10;
+            UnityEngine.Debug.Log(a);
+            string b = "12";
+            UnityEngine.Debug.Log(b);
+            Type type = typeof(int);
+            UnityEngine.Debug.Log(type.ToString());
             UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.Start() -------------------");
             TestAction += DoAction;
             TestAction(1, "1", true);

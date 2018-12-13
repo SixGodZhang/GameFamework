@@ -3,7 +3,7 @@ using System;
 
 namespace {$Namespace}
 {
-    class ILRuntimeHelper
+    public class ILRuntimeHelper
     {
         public static void Init(ILRuntime.Runtime.Enviorment.AppDomain app)
         {
