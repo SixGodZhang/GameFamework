@@ -2,7 +2,7 @@
 using GameFramework.Test;
 using System;
 
-namespace aaa
+namespace ILRuntime
 {
     public class ILRuntimeHelper
     {
@@ -24,9 +24,7 @@ namespace aaa
 			app.RegisterCrossBindingAdaptor(new IDisposableAdaptor());
 
 			// delegate register 
-						
-			app.DelegateManager.RegisterMethodDelegate<System.Int32,System.String,System.Boolean>();
-
+			
 
 			// delegate convertor
             

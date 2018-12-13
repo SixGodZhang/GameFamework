@@ -3,8 +3,7 @@ using ILRuntime.CLR.Method;
 using ILRuntime.Runtime.Enviorment;
 using ILRuntime.Runtime.Intepreter;
 
-namespace {$Namespace}
-{   
+{$NamespaceBegin}
     public class {$ClassName}Adaptor : CrossBindingAdaptor
     {
         public override Type BaseCLRType
@@ -64,4 +63,4 @@ namespace {$Namespace}
     }
 
 	{$Interface}
-}
+{$NamespaceEnd}

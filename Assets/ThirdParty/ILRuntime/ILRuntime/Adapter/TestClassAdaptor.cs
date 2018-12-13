@@ -4,7 +4,7 @@ using ILRuntime.Runtime.Enviorment;
 using ILRuntime.Runtime.Intepreter;
 
 namespace GameFramework.Test
-{   
+{
     public class TestClassAdaptor : CrossBindingAdaptor
     {
         public override Type BaseCLRType

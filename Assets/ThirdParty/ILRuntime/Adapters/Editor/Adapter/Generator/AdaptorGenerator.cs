@@ -50,7 +50,18 @@ namespace CodeGenerationTools.Generator
                 }
             }
 
-            SetKeyValue("{$Namespace}", type.Namespace);
+            if (!string.IsNullOrWhiteSpace(type.Namespace))
+            {
+
+                SetKeyValue("{$NamespaceBegin}", "namespace " + type.Namespace +"\n{");
+                SetKeyValue("{$NamespaceEnd}", "}");
+            }
+            else
+            {
+                SetKeyValue("{$NamespaceBegin}", "");
+                SetKeyValue("{$NamespaceEnd}", "");
+            }
+            
             SetKeyValue("{$ClassName}", type.Name);
             SetKeyValue("{$MethodArea}", methodsbody);
 

@@ -3,8 +3,7 @@ using ILRuntime.CLR.Method;
 using ILRuntime.Runtime.Enviorment;
 using ILRuntime.Runtime.Intepreter;
 
-namespace aaa
-{   
+
     public class SubMonoBehaviorAdaptor : CrossBindingAdaptor
     {
         public override Type BaseCLRType
@@ -119,4 +118,3 @@ namespace aaa
     }
 
 	
-}

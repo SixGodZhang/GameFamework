@@ -75,7 +75,7 @@ namespace CodeGenerationTools.Generator
             }
             SetKeyValue("{$InterfaceAdaptorInit}", interfaceRegStr);
 
-            SetKeyValue("{$Namespace}", nsStr??"ILRuntime");
+            SetKeyValue("{$Namespace}", string.IsNullOrWhiteSpace(nsStr)?"ILRuntime":nsStr);
 
             return true;
         }

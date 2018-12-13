@@ -82,8 +82,6 @@ namespace GameFramework.Taurus
                 }
             }
 
-            MonoBehaviour
-
             GUILayout.EndHorizontal();
             GUILayout.Label(_line);
 

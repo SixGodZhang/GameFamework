@@ -70,11 +70,6 @@ namespace GameFramework.Taurus
         private Color _warning = Color.yellow;
         private Color _error = Color.red;
 
-        //
-        private bool isNeedRefresh = false;
-
-
-
         private readonly Dictionary<string, TypeDefinition> _adaptorSingleInterfaceDic = new Dictionary<string, TypeDefinition>();
         private readonly Dictionary<string, TypeDefinition> _adaptorDic = new Dictionary<string, TypeDefinition>();
 
