@@ -3,12 +3,13 @@
 // <copyright>
 //     Copyright (c) 2018 Zhang Hui. All rights reserved.
 // </copyright>
-// <describe> #ILRuntime自动生成适配器工具类# </describe>
+// <describe> #ILRuntime自动生成绑定工具类# </describe>
+// <desc>此类已经废除,若启用请去掉CSHotfix</desc>
 // <email> whdhxyzh@gmail.com </email>
 // <time> #2018/12/3 星期一 15:58:46# </time>
 //-----------------------------------------------------------------------
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && CSHotfix
 using GameFramework.Taurus;
 using System;
 using System.Collections.Generic;
@@ -63,13 +64,30 @@ public class ILRuntimeCLRBinding
             return;
 
         List<Type> types = new List<Type>();
-        types.Add(typeof(List<ILRuntime.Runtime.Intepreter.ILTypeInstance>));
+        //List<T>
+        //types.Add(typeof(List<ILRuntime.Runtime.Intepreter.ILTypeInstance>));
         //导出主工程中的类型
-        types.AddRange(ExportGameDllTyps());
+        //types.AddRange(ExportGameDllTyps());
         //导出Unity中的类型
-        types.AddRange(ExportUnityTypes());
+        //types.AddRange(ExportUnityTypes());
+        //生成一些系统类型
+        //types.AddRange(GeneratorConfig.whiteSystemTypeList);
+        //指定一些特殊类型(Test用法)
+        types.AddRange(ExportSpecialTypes());
         ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(types, GeneratorConfig.GenCLRBindingTrunkPath);
         AssetDatabase.Refresh();
+    }
+
+    /// <summary>
+    /// 生成指定的一些特殊类
+    /// </summary>
+    /// <returns></returns>
+    private static List<Type> ExportSpecialTypes()
+    {
+        return new List<Type>()
+        {
+            typeof(Type)
+        };
     }
 
     /// <summary>
@@ -172,33 +190,34 @@ public class ILRuntimeCLRBinding
             type.Name.Contains("<");
     }
 
-    //[MenuItem("ILRuntime/Generate CLR Binding Code")]
-    //static void GenerateCLRBinding()
-    //{
-    //    List<Type> types = new List<Type>();
-    //    types.Add(typeof(int));
-    //    types.Add(typeof(float));
-    //    types.Add(typeof(long));
-    //    types.Add(typeof(object));
-    //    types.Add(typeof(string));
-    //    types.Add(typeof(Array));
-    //    types.Add(typeof(Vector2));
-    //    types.Add(typeof(Vector3));
-    //    types.Add(typeof(Quaternion));
-    //    types.Add(typeof(GameObject));
-    //    types.Add(typeof(UnityEngine.Object));
-    //    types.Add(typeof(Transform));
-    //    types.Add(typeof(RectTransform));
-    //    // types.Add(typeof(CLRBindingTestClass));
-    //    types.Add(typeof(Time));
-    //    types.Add(typeof(Debug));
-    //    //所有DLL内的类型的真实C#类型都是ILTypeInstance
-    //    types.Add(typeof(List<ILRuntime.Runtime.Intepreter.ILTypeInstance>));
+    [MenuItem("ILRuntime/Generate CLR Binding Code(offical)")]
+    static void GenerateCLRBinding()
+    {
+        List<Type> types = new List<Type>();
+        types.Add(typeof(Type));
+        //types.Add(typeof(int));
+        //types.Add(typeof(float));
+        //types.Add(typeof(long));
+        //types.Add(typeof(object));
+        //types.Add(typeof(string));
+        //types.Add(typeof(Array));
+        //types.Add(typeof(Vector2));
+        //types.Add(typeof(Vector3));
+        //types.Add(typeof(Quaternion));
+        //types.Add(typeof(GameObject));
+        //types.Add(typeof(UnityEngine.Object));
+        //types.Add(typeof(Transform));
+        //types.Add(typeof(RectTransform));
+        //// types.Add(typeof(CLRBindingTestClass));
+        //types.Add(typeof(Time));
+        //types.Add(typeof(Debug));
+        //所有DLL内的类型的真实C#类型都是ILTypeInstance
+        //types.Add(typeof(List<ILRuntime.Runtime.Intepreter.ILTypeInstance>));
 
-    //    //types.Add(typeof(SubMonoBehavior));
+        //types.Add(typeof(SubMonoBehavior));
 
-    //    ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(types, "Assets/ThirdParty/ILRuntime/ILRuntime/Generated");
-    //}
+        ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(types, "Assets/ThirdParty/ILRuntime/ILRuntime/Generated");
+    }
 
     //[MenuItem("ILRuntime/Generate CLR Binding Code By Analysis")]
     //static void GenerateCLRBindingByAnalysis()

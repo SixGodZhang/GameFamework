@@ -8,6 +8,9 @@
 // <time> #2018/12/6 星期四 14:57:57# </time>
 //-----------------------------------------------------------------------
 
+using ILRuntime.Other;
+
+[NeedAdaptor]
 public abstract class SubMonoBehavior
 {
     /// <summary>

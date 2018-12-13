@@ -8,7 +8,6 @@
 // <time> #2018/12/6 星期四 12:42:52# </time>
 //-----------------------------------------------------------------------
 
-using ILRuntime.Runtime.Adaptors;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -117,6 +116,7 @@ namespace GameFramework.Taurus
             byte[] pdb = null;
 #if UNITY_EDITOR
             //pdb不是AB文件,单独流程加载
+            UnityEngine.Debug.Log(pdbpath);
             pdb = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>(pdbpath).bytes;
             Appdomain.DebugService.StartDebugService(56000);
 #endif
@@ -161,7 +161,7 @@ namespace GameFramework.Taurus
             });
 
             //注册一些适配器
-            AdapterRegister.RegisterCrossBindingAdaptor(Appdomain);
+            //AdapterRegister.RegisterCrossBindingAdaptor(Appdomain);
         }
 
         #region 周期函数

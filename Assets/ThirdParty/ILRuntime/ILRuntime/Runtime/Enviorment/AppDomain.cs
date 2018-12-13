@@ -129,7 +129,7 @@ namespace ILRuntime.Runtime.Enviorment
                 return dele;
             });
 
-            RegisterCrossBindingAdaptor(new Adaptors.AttributeAdaptor());
+            //RegisterCrossBindingAdaptor(new Adaptors.AttributeAdaptor());
 
             debugService = new Debugger.DebugService(this);
         }

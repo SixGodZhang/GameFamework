@@ -42,8 +42,8 @@ namespace GameFramework.Taurus
                     HotFixPath hotFixPath = new HotFixPath();
 
                     hotFixPath.DllPath = "Assets/Game/HotFix/Hotfixdll.bytes";
-                    hotFixPath.MdbPath = "Assets/Game/HotFix/Hotfix.dll.mdb";
-                    hotFixPath.PdbPath = "Assets/Game/HotFix/Hotfix.dll.pdb";
+                    hotFixPath.MdbPath = "Assets/Game/HotFix/Hotfix.dll.mdb.bytes";
+                    hotFixPath.PdbPath = "Assets/Game/HotFix/Hotfix.dll.pdb.bytes";
                     _hotFixPath = (HotFixPath?)hotFixPath;
                 }
                 return _hotFixPath;

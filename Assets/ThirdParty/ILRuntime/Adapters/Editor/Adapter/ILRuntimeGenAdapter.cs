@@ -4,22 +4,125 @@
 //     Copyright (c) 2018 Zhang Hui. All rights reserved.
 // </copyright>
 // <describe> #跨域继承,生成ILRuntime的适配器# </describe>
+// <desc> 被CSHotfix标记的代码，属于弃用代码</desc>
+// <desc> 此工具类即将被重写 </desc>
 // <email> whdhxyzh@gmail.com </email>
 // <time> #2018/12/6 星期四 21:46:41# </time>
 //-----------------------------------------------------------------------
-
-#if UNITY_EDITOR
+using CodeGenerationTools.Generator;
+using GameFramework.Taurus;
+using Mono.Cecil;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine;
 
+/// <summary>
+/// 创建配置文件
+/// </summary>
+public class GenAdapterConfigAsset : Editor
+{
+    [MenuItem("ILRuntime/CreateAdapterConfig")]
+    static void CreateGenAdapterConfigAsset()
+    {
+        if (File.Exists(Application.dataPath + "/config.asset"))
+        {
+            if (EditorUtility.DisplayDialog("提示", "配置文件存在,确定是否重新创建", "OK", "Cancel"))
+            {
+                File.Delete(Application.dataPath + "/config.asset");
+            }
+            else
+                return;
+        }
+
+        var config = ScriptableObject.CreateInstance<GenAdapterConfig>();
+
+        AssetDatabase.CreateAsset(config, "Assets/config.asset");
+        AssetDatabase.Refresh();
+        UnityEngine.Debug.Log("op end!");
+    }
+}
+
+#if UNITY_EDITOR
+/// <summary>
+/// 适配器生成类
+/// </summary>
 public class ILRuntimeGenAdapter
 {
     #region 字段&属性
-    private static List<Type> _adapterList = new List<Type>();
+    private string _outputPath;
+
+    private readonly Dictionary<string, TypeDefinition> _adaptorSingleInterfaceDic = new Dictionary<string, TypeDefinition>();
+    private readonly Dictionary<string, TypeDefinition> _adaptorDic = new Dictionary<string, TypeDefinition>();
+
+    private readonly Dictionary<string, TypeDefinition> _delegateCovDic = new Dictionary<string, TypeDefinition>();
+    private readonly Dictionary<string, TypeReference> _delegateRegDic = new Dictionary<string, TypeReference>();
+
+    private AdaptorGenerator _adGenerator;
+    private HelperGenerator _helpGenerator;
+    private InterfaceAdapterGenerator _interfaceAdapterGenerator;
+
+    private string _adaptorAttrName = "ILRuntime.Other.NeedAdaptorAttribute";
+    private string _delegateAttrName = "ILRuntime.Other.DelegateExportAttribute";
+    private string _singleInterfaceAttrName = "ILRuntime.Other.SingleInterfaceExportAttribute";
     #endregion
+
+    [MenuItem("ILRuntime/GenerateILRuntimeAdapter")]
+    static void GeneratorILRuntimeAdapter()
+    {
+
+    }
+
+    /// <summary>
+    /// 工具入口
+    /// </summary>
+    void ToolMain()
+    {
+        _outputPath = Application.dataPath + "/ThirdParty/ILRuntime/ILRuntime/Runtime/Adaptors/";
+        if (!Directory.Exists(_outputPath))
+            Directory.CreateDirectory(_outputPath);
+
+        string out_path = EditorPrefs.GetString("out_path");
+        string main_assembly_path = EditorPrefs.GetString("main_assembly_path");
+        string il_assembly_path = EditorPrefs.GetString("il_assembly_path");
+
+        _adaptorSingleInterfaceDic.Clear();
+        _adaptorDic.Clear();
+        _delegateCovDic.Clear();
+        _delegateRegDic.Clear();
+
+        LoadTemplates();
+    }
+
+    /// <summary>
+    /// 加载所有模板
+    /// </summary>
+    private void LoadTemplates()
+    {
+        var tmpdPath = Application.dataPath + "/ThirdParty/ILRuntime/Adapters/Editor/Adapter/Template";
+        _interfaceAdapterGenerator = new InterfaceAdapterGenerator();
+        _interfaceAdapterGenerator.LoadTemplateFromFile(tmpdPath + "adaptor_single_interface.tmpd");
+
+        _adGenerator = new AdaptorGenerator();
+        _adGenerator.LoadTemplateFromFile(tmpdPath + "adaptor.tmpd");
+
+        _helpGenerator = new HelperGenerator();
+        _helpGenerator.LoadTemplateFromFile(tmpdPath + "helper.tmpd");
+    }
+}
+
+#endif
+
+
+#if UNITY_EDITOR && CSHotfix
+
+public class ILRuntimeGenAdapter
+{
+#region 字段&属性
+    private static List<Type> _adapterList = new List<Type>();
+#endregion
 
     [MenuItem("ILRuntime/GenerateILRuntimeAdapter")]
     static void GeneratorILRuntimeAdapter()

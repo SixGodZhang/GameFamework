@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using ILRuntime.Runtime.Enviorment;
 using ILRuntime.Other;
+//using System.Diagnostics.Contracts;
 
 namespace ILRuntime.Runtime.CLRBinding
 {
@@ -66,11 +67,17 @@ namespace ILRuntime.Runtime.Generated
                     string typeDef = string.Format("            Type type = typeof({0});", realClsName);
 
                     MethodInfo[] methods = i.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly);
+                    foreach (var item in methods)
+                    {
+                        UnityEngine.Debug.Log(item.Name);
+                    }
+
                     //过滤:
                     //说明:过滤一些在黑名单中和一些有特殊(返回值或者参数类型)的方法成员，比如Intptr等
                     methods = methods.ToList().FindAll((methodInfo) =>
                     {
                         bool hr = methodInfo.GetCustomAttributes(typeof(ObsoleteAttribute), true).Length > 0 ||
+                        //methodInfo.GetCustomAttributes(typeof(PureAttribute), true).Length > 0 ||
                         MethodBindingGenerator.IsMethodPtrType(methodInfo) ||
                         GeneratorConfig.SpecialBlackTypeList.Exists((_list) =>
                         {
@@ -93,6 +100,7 @@ namespace ILRuntime.Runtime.Generated
                     fields = fields.ToList().FindAll((field) =>
                     {
                         bool hr = field.GetCustomAttributes(typeof(ObsoleteAttribute), true).Length > 0 ||
+                        //field.GetCustomAttributes(typeof(PureAttribute), true).Length > 0 ||
                         GeneratorConfig.SpecialBlackTypeList.Exists((_list) =>
                         {
                             string _class = _list[0];
