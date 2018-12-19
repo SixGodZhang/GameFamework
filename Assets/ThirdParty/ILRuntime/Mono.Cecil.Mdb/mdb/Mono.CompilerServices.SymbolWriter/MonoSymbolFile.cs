@@ -523,6 +523,11 @@ namespace Mono.CompilerServices.SymbolWriter
             {
                 this.method_token_hash = new Dictionary<int, MethodEntry>();
                 this.method_list = new List<MethodEntry>();
+                if (this.reader == null)
+                    UnityEngine.Debug.LogError("reader == null");
+                if(this.reader.BaseStream == null)
+                    UnityEngine.Debug.LogError("this.reader.BaseStream == null");
+                UnityEngine.Debug.LogError(this.reader.BaseStream.Position);
                 long old_pos = this.reader.BaseStream.Position;
                 this.reader.BaseStream.Position = (long)this.ot.MethodTableOffset;
                 for (int i = 0; i < this.MethodCount; i++)

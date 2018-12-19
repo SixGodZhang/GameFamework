@@ -93,7 +93,7 @@ namespace GameFramework.Taurus
             //pdb and mdb 没有重命名bytes文件,因此不能被Unity识别,所以只能通过下面的文件流的方式加载
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
-                FileStream fileStream = File.OpenRead(Application.dataPath + "/Game/Hotfix/Hotfix.dll.mdb");
+                FileStream fileStream = File.OpenRead(Application.dataPath + "/Game/Hotfix/Hotfix.dll.mdb.bytes");
                 if (fileStream != null && fileStream.Length > 0)
                 {
                     byte[] byteData = new byte[fileStream.Length];

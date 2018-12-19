@@ -8,11 +8,13 @@
 // <time> #2018/12/5 星期三 16:54:58# </time>
 //-----------------------------------------------------------------------
 
+using ILRuntime.Other;
 using System;
 using System.Collections.Generic;
 
 namespace GameFramework.Taurus
 {
+    [NeedAdaptor]
     [AttributeUsage(AttributeTargets.Class)]
     public class UIViewAttribute:Attribute
     {

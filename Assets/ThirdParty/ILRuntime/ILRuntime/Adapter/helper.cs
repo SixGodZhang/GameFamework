@@ -1,4 +1,5 @@
 
+using GameFramework.Taurus;
 using GameFramework.Test;
 using System;
 
@@ -17,11 +18,12 @@ namespace ILRuntime
 			// adaptor register 
                         
 			app.RegisterCrossBindingAdaptor(new SubMonoBehaviorAdaptor());            
-			app.RegisterCrossBindingAdaptor(new TestClassAdaptor());   
+			app.RegisterCrossBindingAdaptor(new TestClassAdaptor());             
 
 			// interface adaptor register
 			            
-			app.RegisterCrossBindingAdaptor(new IDisposableAdaptor());
+			app.RegisterCrossBindingAdaptor(new IDisposableAdaptor());            
+			app.RegisterCrossBindingAdaptor(new IUIViewAdaptor());
 
 			// delegate register 
 			

@@ -589,7 +589,7 @@ namespace GameFramework.Taurus
         #endregion
 
         #region 编辑器菜单
-        [MenuItem("ILRuntime/Adapter")]
+        [MenuItem("ILRuntime/Adapter",false,100)]
         static void ShowGenerateILRuntimeAdapterWindow()
         {
             GenerateILRuntimeAdapterWindow window = Instance;

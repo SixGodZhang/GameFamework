@@ -106,7 +106,7 @@ namespace GameFramework.Taurus
         #endregion
 
         #region 编辑器菜单
-        [MenuItem("ILRuntime/Binding")]
+        [MenuItem("ILRuntime/Binding",false,110)]
         static void ShowGenerateILRuntimeAdapterWindow()
         {
             GenerateILRuntimeBindingWindow window = Instance;

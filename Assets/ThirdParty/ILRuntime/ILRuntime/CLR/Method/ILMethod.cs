@@ -140,7 +140,7 @@ namespace ILRuntime.CLR.Method
             this.appdomain = domain;
             paramCnt = def.HasParameters ? def.Parameters.Count : 0;
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
-            if (def.HasBody)
+            if (def.HasBody && def.Body!=null)
             {
                 var sp = GetValidSequence(0, 1);
                 if (sp != null)

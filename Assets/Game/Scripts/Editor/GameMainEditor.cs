@@ -75,6 +75,9 @@ namespace GameFramework.Taurus
         {
             if (_gameMain == null)
                 return;
+
+           // EditorGUI.DelayedTextField(new Rect(0, 0, 100, 50),"123");
+            //GUILayout.SelectionGrid(1, new string[] { "qq", "112" }, 1);
             #region 资源加载模块
             GUI.color = _resourceColor;
             GUILayout.BeginVertical("Box");
