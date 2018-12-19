@@ -16,31 +16,21 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
-using static UnityEditor.IMGUI.Controls.MultiColumnHeaderState;
 
 namespace GameFramework.Taurus
 {
     public class ATTabelView:TreeView
     {
-
+        #region 字段&属性
+        private const float _toggleWidth = 18f;
         List<RowItem<TestUnit>> _allRowDatas;
+        private bool _ascending = true;
+        #endregion
 
+        #region 构造函数
         /// <summary>
-        /// 默认构造函数
+        /// 构造函数
         /// </summary>
-        /// <param name="state"></param>
-        public ATTabelView(TreeViewState state)
-            :base(state)
-        {
-            Reload();
-        }
-
-        /// <summary>
-        /// 多行构造函数
-        /// </summary>
-        /// <param name="state"></param>
-        /// <param name="multiColumnHeader"></param>
-        /// <param name="dataSource"></param>
         public ATTabelView(TreeViewState state, MultiColumnHeader multiColumnHeader, List<TestUnit> dataSource)
             : base(state, multiColumnHeader)
         {
@@ -56,134 +46,45 @@ namespace GameFramework.Taurus
 
             showAlternatingRowBackgrounds = true;
             multiColumnHeader.sortingChanged += OnSortingChanged;
-            multiColumnHeader.visibleColumnsChanged += OnVisibleColumnChanged;
-
             Reload();
         }
+        #endregion
 
+        #region 公开接口
         /// <summary>
-        /// 更新表格数据
+        /// create table header
         /// </summary>
-        /// <param name="dataSource"></param>
-        /// <param name="isLoad">是否是加载单元测试</param>
-        public void UpdateTableData(List<BaseTestUnit> dataSource, bool isLoad = false)
+        /// <returns></returns>
+        public static MultiColumnHeaderState CreateDefaultMultiColumnHeaderState()
         {
-            _allRowDatas.Clear();
-            
-
-            int i = 0;
-            foreach (var item in dataSource)
+            var columns = new[]
             {
-                TestUnit testUnit;
-                if (SelectedConstainUnit(item))
+                new MultiColumnHeaderState.Column
                 {
-                    testUnit = new TestUnit(item.TestName, item.Pass.ToString());
-                    testUnit.enabled = true;
+                    headerContent = new GUIContent("TestName","测试名称"),
+                    headerTextAlignment = TextAlignment.Left,
+                    sortedAscending = true,
+                    sortingArrowAlignment = TextAlignment.Center,
+                    width = 600,
+                    minWidth = 60,
+                    autoResize = false,
+                    allowToggleVisibility = false
+                },
+                new MultiColumnHeaderState.Column
+                {
+                    headerContent = new GUIContent("Result", "测试结果"),
+                    headerTextAlignment = TextAlignment.Left,
+                    sortedAscending = true,
+                    sortingArrowAlignment = TextAlignment.Center,
+                    width = 110,
+                    minWidth = 60,
+                    autoResize = true
                 }
-                else
-                    testUnit = new TestUnit(item.TestName, "--");
+            };
 
-                //testUnit.enabled = item.Pass;
-                _allRowDatas.Add(new RowItem<TestUnit>(i++, testUnit));
-            }
+            Assert.AreEqual(columns.Length, Enum.GetValues(typeof(ColumnType)).Length, "列数不一致");
 
-            Reload();
-        }
-
-        public bool SelectedConstainUnit(BaseTestUnit unit)
-        {
-            List<TestUnit> selectedList = GetSelectedUnits();
-            if (selectedList == null)
-                return false;
-            foreach (var item in selectedList)
-            {
-                if (item.TestName == unit.TestName)
-                    return true;
-
-            }
-
-            return false;
-        }
-
-        void OnSortingChanged(MultiColumnHeader multiColumnHeader)
-        {
-            var rows = GetRows();
-            SortIfNeeded(rows);
-
-            rows.Clear();
-            foreach (var item in rootItem.children)
-            {
-                rows.Add(item);
-            }
-            //repaint
-            Repaint();
-        }
-
-        void SortIfNeeded(IList<TreeViewItem> rows)
-        {
-            if (rows.Count <= 1 || multiColumnHeader.sortedColumnIndex == -1)
-                return;
-
-            // Sort the roots of the existing tree items
-            SortByMultipleColumns();
-
-        }
-
-
-        private bool ascending = true;
-        void SortByMultipleColumns()
-        {
-            var sortedColumns = multiColumnHeader.state.sortedColumns;
-
-            if (sortedColumns.Length == 0)
-                return;
-
-            var rowDatas = rootItem.children.Cast<RowItem<TestUnit>>();
-
-            ascending = !ascending;
-            var orderedQuery = rowDatas.Order(l => l.Data.TestName, ascending);
-
-            //bool ascending = multiColumnHeader.IsSortedAscending(sortedColumns[1]);
-            orderedQuery.ThenBy(l => l.Data.TestName);
-
-            rootItem.children = orderedQuery.Cast<TreeViewItem>().ToList();
-
-        }
-
-        protected override void SingleClickedItem(int id)
-        {
-            Debug.Log("id: " + id);
-            base.SingleClickedItem(id);
-        }
-
-        protected override bool CanMultiSelect(TreeViewItem item)
-        {
-            return true;
-        }
-
-        List<TreeViewItem> viewItems = new List<TreeViewItem>();
-        protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
-        {
-            if (rootItem.hasChildren)
-                rootItem.children.Clear();
-            for (int i = 0; i < _allRowDatas.Count; i++)
-            {
-                rootItem.AddChild(_allRowDatas[i]);
-            }
-
-            //var rows = GetRows();
-            viewItems.Clear();
-
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                Search(searchString, out viewItems);
-            }
-            else
-            {
-                viewItems = _allRowDatas.ToList<TreeViewItem>(); 
-            }
-
-            return viewItems;
+            return new MultiColumnHeaderState(columns);
         }
 
         /// <summary>
@@ -206,32 +107,98 @@ namespace GameFramework.Taurus
             return selectedUnits;
         }
 
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="rootItem"></param>
-        /// <param name="searchString"></param>
-        /// <param name="rows"></param>
-        private void Search(string searchString, out List<TreeViewItem> rows)
+        private bool SelectedConstainUnit(BaseTestUnit unit)
         {
-            var itemList = rootItem.children.Cast<RowItem<TestUnit>>();
-            IEnumerable<RowItem<TestUnit>> units = itemList.Where(unit =>
+            List<TestUnit> selectedList = GetSelectedUnits();
+            if (selectedList == null)
+                return false;
+            foreach (var item in selectedList)
             {
-                return  unit.Data.TestName.Contains(searchString);
-            });
+                if (item.TestName == unit.TestName)
+                    return true;
 
-            rows = units.Cast<TreeViewItem>().ToList();
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// 更新表格数据
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <param name="isLoad">是否是加载单元测试</param>
+        public void UpdateTableData(List<BaseTestUnit> dataSource)
+        {
+            _allRowDatas.Clear();
+            
+            int i = 0;
+            foreach (var item in dataSource)
+            {
+                TestUnit testUnit;
+                if (SelectedConstainUnit(item))
+                {
+                    testUnit = new TestUnit(item.TestName, item.Pass.ToString());
+                    testUnit.enabled = true;
+                }
+                else
+                    testUnit = new TestUnit(item.TestName, "--");
+
+                _allRowDatas.Add(new RowItem<TestUnit>(i++, testUnit));
+            }
+
+            Reload();
+        }
+        #endregion
+
+        #region UI函数
+        protected override TreeViewItem BuildRoot()
+        {
+            var root = new TreeViewItem { id = 0, depth = -1, displayName = "Root" };
+            return root;
+        }
+
+        protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
+        {
+            if (rootItem.hasChildren)
+                rootItem.children.Clear();
+            for (int i = 0; i < _allRowDatas.Count; i++)
+            {
+                rootItem.AddChild(_allRowDatas[i]);
+            }
+
+            List<TreeViewItem> viewItems = new List<TreeViewItem>();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                Search(searchString, out viewItems);
+            }
+            else
+            {
+                viewItems = _allRowDatas.ToList<TreeViewItem>();
+            }
+
+            return viewItems;
+        }
+
+        protected override bool CanMultiSelect(TreeViewItem item)
+        {
+            return true;
         }
 
         protected override void RowGUI(RowGUIArgs args)
         {
-            var item =(RowItem<TestUnit>)args.item;
+            var item = (RowItem<TestUnit>)args.item;
 
             for (var i = 0; i < args.GetNumVisibleColumns(); i++)
                 CellGUI(args.GetCellRect(i), item, (ColumnType)args.GetColumn(i), ref args);
         }
 
-        const float kToggleWidth = 18f;
+        protected override void SingleClickedItem(int id)
+        {
+            Debug.Log("id: " + id);
+            base.SingleClickedItem(id);
+        }
+
         private void CellGUI(Rect rect, RowItem<TestUnit> item, ColumnType type, ref RowGUIArgs args)
         {
             switch (type)
@@ -241,13 +208,13 @@ namespace GameFramework.Taurus
                         // Do toggle
                         Rect toggleRect = rect;
                         toggleRect.x += GetContentIndent(item);
-                        toggleRect.width = kToggleWidth;
+                        toggleRect.width = _toggleWidth;
                         if (toggleRect.xMax < rect.xMax)
                             item.Data.enabled = EditorGUI.Toggle(toggleRect, item.Data.enabled); // hide when outside cell rect
 
                         //Do lable
                         Rect labelRect = rect;
-                        labelRect.x += toggleRect.x + kToggleWidth;
+                        labelRect.x += toggleRect.x + _toggleWidth;
                         DefaultGUI.Label(labelRect, item.Data.TestName, false, false);
                     }
                     break;
@@ -255,7 +222,7 @@ namespace GameFramework.Taurus
                     {
 
                         var defaultColor = GUI.color;
-                        if (item.Data.Result.ToLower() == "false" )
+                        if (item.Data.Result.ToLower() == "false")
                             GUI.color = Color.red;
                         else if (item.Data.Result.ToLower() == ("true"))
                             GUI.color = Color.green;
@@ -269,48 +236,67 @@ namespace GameFramework.Taurus
 
         }
 
-        private void OnVisibleColumnChanged(MultiColumnHeader multiColumnHeader)
+        void OnSortingChanged(MultiColumnHeader multiColumnHeader)
         {
-            throw new NotImplementedException();
-        }
+            var rows = GetRows();
+            SortIfNeeded(rows);
 
-        protected override TreeViewItem BuildRoot()
-        {
-            var root = new TreeViewItem { id = 0, depth = -1, displayName = "Root" };
-            return root;
-        }
-
-        public static MultiColumnHeaderState CreateDefaultMultiColumnHeaderState()
-        {
-            var columns = new[]
+            rows.Clear();
+            foreach (var item in rootItem.children)
             {
-                new MultiColumnHeaderState.Column
-                {
-                    headerContent = new GUIContent("TestName"),
-                    headerTextAlignment = TextAlignment.Left,
-                    sortedAscending = true,
-                    sortingArrowAlignment = TextAlignment.Center,
-                    width = 600,
-                    minWidth = 60,
-                    autoResize = false,
-                    allowToggleVisibility = false
-                },
-                new MultiColumnHeaderState.Column
-                {
-                    headerContent = new GUIContent("Result", "Unit Result"),
-                    headerTextAlignment = TextAlignment.Left,
-                    sortedAscending = true,
-                    sortingArrowAlignment = TextAlignment.Center,
-                    width = 110,
-                    minWidth = 60,
-                    autoResize = true
-                }
-            };
-
-            Assert.AreEqual(columns.Length, Enum.GetValues(typeof(ColumnType)).Length, "列数不一致");
-
-            var state = new MultiColumnHeaderState(columns);
-            return state;
+                rows.Add(item);
+            }
+            //repaint
+            Repaint();
         }
+        #endregion
+
+        #region 内部函数
+        /// <summary>
+        /// 查询
+        /// </summary>
+        private void Search(string searchString, out List<TreeViewItem> rows)
+        {
+            var itemList = rootItem.children.Cast<RowItem<TestUnit>>();
+            IEnumerable<RowItem<TestUnit>> units = itemList.Where(unit =>
+            {
+                return unit.Data.TestName.Contains(searchString);
+            });
+
+            rows = units.Cast<TreeViewItem>().ToList();
+        }
+
+        /// <summary>
+        /// 排序函数
+        /// </summary>
+        void SortByMultipleColumns()
+        {
+            var sortedColumns = multiColumnHeader.state.sortedColumns;
+
+            if (sortedColumns.Length == 0)
+                return;
+
+            var rowDatas = rootItem.children.Cast<RowItem<TestUnit>>();
+            _ascending = !_ascending;
+            var orderedQuery = rowDatas.Order(l => l.Data.TestName, _ascending);
+            orderedQuery.ThenBy(l => l.Data.TestName);
+
+            rootItem.children = orderedQuery.Cast<TreeViewItem>().ToList();
+        }
+
+        /// <summary>
+        /// 是否需要排序
+        /// </summary>
+        /// <param name="rows"></param>
+        void SortIfNeeded(IList<TreeViewItem> rows)
+        {
+            if (rows.Count <= 1 || multiColumnHeader.sortedColumnIndex == -1)
+                return;
+
+            // Sort the roots of the existing tree items
+            SortByMultipleColumns();
+
+        }
+        #endregion
     }
 }

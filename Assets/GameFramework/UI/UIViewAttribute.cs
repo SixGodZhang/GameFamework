@@ -14,7 +14,6 @@ using System.Collections.Generic;
 
 namespace GameFramework.Taurus
 {
-    [NeedAdaptor]
     [AttributeUsage(AttributeTargets.Class)]
     public class UIViewAttribute:Attribute
     {

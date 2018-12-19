@@ -9,16 +9,12 @@
 //-----------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using AppDomain = ILRuntime.Runtime.Enviorment.AppDomain;
 
 namespace GameFramework.Taurus.UnityEditor
 {
-    /// <summary>
-    /// 抽象类
-    /// </summary>
     public abstract class BaseTestUnit : ITestable
     {
         protected AppDomain App;
@@ -26,7 +22,7 @@ namespace GameFramework.Taurus.UnityEditor
         protected string TypeName;
         protected string MethodName;
         public bool Pass;
-        protected StringBuilder Message = null;//= new StringBuilder();
+        protected StringBuilder Message = null;
 
         public string TestName { get { return TypeName + "." + MethodName; } }
 
@@ -80,12 +76,6 @@ namespace GameFramework.Taurus.UnityEditor
         #endregion
 
         #region 常用工具方法
-
-        public Object getInstance(string type)
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// call Method with no params and no return value;
         /// </summary>
@@ -108,7 +98,7 @@ namespace GameFramework.Taurus.UnityEditor
             try
             {
                 var sw = new System.Diagnostics.Stopwatch();
-                UnityEngine.Debug.Log(string.Format("Invoking {0}.{1}", type, method));
+                //UnityEngine.Debug.Log(string.Format("Invoking {0}.{1}", type, method));
                 //Console.WriteLine("Invoking {0}.{1}", type, method);
                 sw.Start();
                 var res = App.Invoke(type, method, null); //InstanceTest

@@ -51,7 +51,7 @@ namespace GameFramework.Taurus
             _output_path = EditorGUILayout.TextField("输出目录: ", _output_path);
             if (GUILayout.Button("选择输出文件夹", GUILayout.Width(100), GUILayout.Height(20)))
             {
-                _output_path = EditorUtility.OpenFolderPanel("选择文件夹", Application.dataPath + "/ThirdParty/ILRuntime/ILRuntime/", "");
+                _output_path = EditorUtility.OpenFolderPanel("选择文件夹", string.IsNullOrWhiteSpace(_output_path) ? Application.dataPath : _output_path, "");
                 if (!string.IsNullOrWhiteSpace(_output_path))
                 {
                     EditorPrefs.SetString("output_path", _output_path);
@@ -98,10 +98,9 @@ namespace GameFramework.Taurus
                 domain.LoadAssembly(fs);
             }
             //Crossbind Adapter is needed to generate the correct binding code
-            //ILRuntime.ILRuntimeHelper.Init(domain);
+            ILRuntime.ILRuntimeHelper.Init(domain);
 
-            string outputPath = Application.dataPath + "/ThirdParty/ILRuntime/ILRuntime/Binding";
-            ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(domain, outputPath);
+            ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(domain, _output_path);
         }
         #endregion
 

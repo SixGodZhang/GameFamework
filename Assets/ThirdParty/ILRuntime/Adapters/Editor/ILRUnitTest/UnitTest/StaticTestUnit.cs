@@ -7,10 +7,6 @@
 // <email> whdhxyzh@gmail.com </email>
 // <time> #2018/12/17 星期一 14:25:45# </time>
 //-----------------------------------------------------------------------
-
-using System;
-using System.Collections.Generic;
-
 namespace GameFramework.Taurus.UnityEditor
 {
     /// <summary>
@@ -18,8 +14,6 @@ namespace GameFramework.Taurus.UnityEditor
     /// </summary>
     class StaticTestUnit : BaseTestUnit
     {
-        //protected object _returnType;
-
         public override void Run()
         {
             Invoke(TypeName, MethodName);

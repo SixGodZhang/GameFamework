@@ -18,22 +18,13 @@ namespace GameFramework.Taurus
         public string TestName;
         public string Result;
         public bool enabled;
-        public TestUnitState state;
 
         public TestUnit(string testName, string result)
         {
             TestName = testName;
             Result = result;
-            state = TestUnitState.None;
             enabled = false;
         }
-    }
-
-    public enum TestUnitState
-    {
-        Success,
-        Fail,
-        None
     }
 
     enum ColumnType

@@ -18,7 +18,7 @@ namespace ILRuntime
 			// adaptor register 
                         
 			app.RegisterCrossBindingAdaptor(new SubMonoBehaviorAdaptor());            
-			app.RegisterCrossBindingAdaptor(new TestClassAdaptor());             
+			app.RegisterCrossBindingAdaptor(new TestClassAdaptor());   
 
 			// interface adaptor register
 			            
@@ -26,7 +26,11 @@ namespace ILRuntime
 			app.RegisterCrossBindingAdaptor(new IUIViewAdaptor());
 
 			// delegate register 
+						
+			app.DelegateManager.RegisterMethodDelegate<System.Int32,System.String,System.Boolean>();
 			
+			app.DelegateManager.RegisterMethodDelegate<System.Int32,System.String>();
+
 
 			// delegate convertor
             

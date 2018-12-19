@@ -18,18 +18,21 @@ namespace GameFramework.Taurus
 {
     public class ATTabelWindow
     {
-        public ATTabelView m_SimpleTreeView;
-        List<TestUnit> testList = new List<TestUnit>();
+        public ATTabelView ATTableView;
+        List<TestUnit> testList;
         [SerializeField] TreeViewState m_TreeViewState;
         [NonSerialized] bool m_Initialized;
         [SerializeField] MultiColumnHeaderState m_MultiColumnHeaderState;
         SearchField m_SearchField;
 
-        public Action<List<TestUnit>> ExcuteUnitsTest;
+        /// <summary>
+        /// 执行选中的单元测试
+        /// </summary>
+        private Action<List<TestUnit>> ExcuteUnitsTest;
 
-        public ATTabelWindow(List<TestUnit> list, Action<List<TestUnit>> UnitCallBack)
+        public ATTabelWindow(Action<List<TestUnit>> UnitCallBack)
         {
-            testList = list;
+            testList = new List<TestUnit>();
             ExcuteUnitsTest = UnitCallBack;
         }
 
@@ -74,7 +77,7 @@ namespace GameFramework.Taurus
             {
                 //TODO
                 //执行单元测试
-                ExcuteUnitsTest(m_SimpleTreeView.GetSelectedUnits());
+                ExcuteUnitsTest(ATTableView.GetSelectedUnits());
             }
             EditorGUILayout.EndHorizontal();
         }
@@ -147,21 +150,21 @@ namespace GameFramework.Taurus
                 if (firstInit)
                     multiColumnHeader.ResizeToFit();
 
-                m_SimpleTreeView = new ATTabelView(m_TreeViewState, multiColumnHeader, testList);
+                ATTableView = new ATTabelView(m_TreeViewState, multiColumnHeader, testList);
                 m_SearchField = new SearchField();
-                m_SearchField.downOrUpArrowKeyPressed += m_SimpleTreeView.SetFocusAndEnsureSelectedItem;
+                m_SearchField.downOrUpArrowKeyPressed += ATTableView.SetFocusAndEnsureSelectedItem;
                 m_Initialized = true;
             }
         }
 
         void OnDrawTreeView()
         {
-            m_SimpleTreeView.OnGUI(new Rect(30,65,Screen.width-80,300));
+            ATTableView.OnGUI(new Rect(30,65,Screen.width-80,300));
         }
 
         private void OnDrawToolBar()
         {
-            m_SimpleTreeView.searchString = m_SearchField.OnGUI( m_SimpleTreeView.searchString);
+            ATTableView.searchString = m_SearchField.OnGUI( ATTableView.searchString);
         }
     }
 }

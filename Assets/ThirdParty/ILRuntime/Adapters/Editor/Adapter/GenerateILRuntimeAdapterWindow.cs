@@ -178,10 +178,6 @@ namespace GameFramework.Taurus
                 
             }
 
-            //if (GUILayout.Button("CopyFile", GUILayout.Width(80), GUILayout.Height(20)))
-            //{
-
-            //}
             GUILayout.EndHorizontal();
             GUILayout.Space(10);
 
@@ -433,6 +429,7 @@ namespace GameFramework.Taurus
                         //}
                     }
                 }
+                Print("----------------main scripts assembly loaded" , ToolLogType.Normal);
             }
             catch (Exception ex)
             {

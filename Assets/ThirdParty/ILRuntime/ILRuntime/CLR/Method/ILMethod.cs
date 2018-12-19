@@ -140,7 +140,7 @@ namespace ILRuntime.CLR.Method
             this.appdomain = domain;
             paramCnt = def.HasParameters ? def.Parameters.Count : 0;
 #if DEBUG && !DISABLE_ILRUNTIME_DEBUG
-            if (def.HasBody && def.Body!=null)
+            if (def.HasBody)
             {
                 var sp = GetValidSequence(0, 1);
                 if (sp != null)
@@ -199,6 +199,14 @@ namespace ILRuntime.CLR.Method
             }
         }
 
+        public bool HasBody
+        {
+            get
+            {
+                return body != null;
+            }
+        }
+
         public int LocalVariableCount
         {
             get
@@ -254,6 +262,13 @@ namespace ILRuntime.CLR.Method
             get;
             private set;
         }
+
+        public void Prewarm()
+        {
+            if (body == null)
+                InitCodeBody();
+        }
+
         void InitCodeBody()
         {
             if (def.HasBody)
@@ -512,6 +527,8 @@ namespace ILRuntime.CLR.Method
             if (token is TypeReference)
             {
                 TypeReference _ref = ((TypeReference)token);
+                if (_ref.IsArray)
+                    return CheckHasGenericParamter(_ref.GetElementType());
                 if (_ref.IsGenericParameter)
                     return true;
                 if (_ref.IsGenericInstance)
