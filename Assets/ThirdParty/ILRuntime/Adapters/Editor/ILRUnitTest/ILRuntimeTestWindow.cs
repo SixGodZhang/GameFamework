@@ -167,7 +167,7 @@ namespace GameFramework.Taurus.UnityEditor
                     _isLoadAssembly = true;
 
                     //委托
-                    ILRuntimeHelper.Init(App);
+                    //ILRuntimeHelper.Init(App);
                     //绑定
                     ILRuntime.Runtime.Generated.CLRBindings.Initialize(App);
                 }
@@ -181,6 +181,9 @@ namespace GameFramework.Taurus.UnityEditor
 
         public void UnitTests(List<TestUnit> units)
         {
+            if (units == null)
+                return;
+
             foreach (var item in units)
             {
                 for (int i = 0; i < _testUnitList.Count; i++)

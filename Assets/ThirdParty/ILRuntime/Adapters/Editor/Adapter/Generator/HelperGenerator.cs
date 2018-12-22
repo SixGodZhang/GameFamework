@@ -143,6 +143,9 @@ namespace CodeGenerationTools.Generator
                 {
                     var td = item as TypeDefinition;
 
+                    if (td == null)
+                        continue;
+
                     string argsType = "";
                     foreach (var method in td.Methods)
                     {

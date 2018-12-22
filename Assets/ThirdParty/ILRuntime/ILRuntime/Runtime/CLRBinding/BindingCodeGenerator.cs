@@ -721,7 +721,7 @@ using System.Reflection;
 
 namespace ILRuntime.Runtime.Generated
 {
-    class CLRBindings
+    public class CLRBindings
     {");
 
                 if (valueTypeBinders != null)

@@ -368,7 +368,7 @@ namespace GameFramework.Taurus
 
                 //TODO
                 //系统相关的一些需要写适配器的接口
-                List<TypeDefinition> types = WhiteTypeList.GetSystemWhiteList();
+                List<TypeDefinition> types = WhiteTypeList.GetThirdPartyWhiteList();
 
                 var system_white_reference_table = new List<TypeDefinition>(types);
 
@@ -421,12 +421,12 @@ namespace GameFramework.Taurus
                         }
 
                         //白名单中的类型(不需要做)
-                        //if (system_white_reference_table.Contains(t))
-                        //{
-                        //    Print("[System Type Export]" + t.FullName);
-                        //    LoadAdaptor(t);
-                        //    continue;
-                        //}
+                        if (system_white_reference_table.Contains(t))
+                        {
+                            Print("[System Type Export]" + t.FullName);
+                            LoadAdaptor(t);
+                            continue;
+                        }
                     }
                 }
                 Print("----------------main scripts assembly loaded" , ToolLogType.Normal);
@@ -489,6 +489,10 @@ namespace GameFramework.Taurus
                     var module = ModuleDefinition.ReadModule(fs);
                     foreach (var typeDefinition in module.Types)
                     {
+                        //如果是Debug类型的，需要手动注册并且转换
+                        if (typeDefinition.Namespace == "Hotfix.Hotfix.Bugfix")
+                            continue;
+
                         foreach (var methodDefinition in typeDefinition.Methods)
                         {
                             //方法主体包含指令，且指令不为null

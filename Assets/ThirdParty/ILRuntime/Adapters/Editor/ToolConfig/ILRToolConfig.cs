@@ -8,9 +8,11 @@
 // <time> #2018/12/19 星期三 20:23:50# </time>
 //-----------------------------------------------------------------------
 
+using GameFramework.Taurus;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 namespace GameFramework.Taurus
@@ -31,12 +33,20 @@ namespace GameFramework.Taurus
         }
 
         private string _hotfixFolder;
+        //line
+        private string _line = new string('_', 150);//分割线
+        private WhiteTreeView _whiteTreeView;
+        [SerializeField] TreeViewState m_TreeViewState;
         #endregion
 
         #region 周期函数
         private void OnEnable()
         {
             _hotfixFolder = EditorPrefs.GetString("hotfixFolder");
+            if (m_TreeViewState == null)
+                m_TreeViewState = new TreeViewState();
+
+            _whiteTreeView = new WhiteTreeView(m_TreeViewState);
         }
 
         private void OnGUI()
@@ -55,7 +65,17 @@ namespace GameFramework.Taurus
             }
             EditorGUILayout.EndHorizontal();
 
+            EditorGUILayout.LabelField("第三方DLL白名单 Type&Interface");
+            EditorGUILayout.LabelField(_line);
+            DrawWhiteGUI();
             EditorGUILayout.EndVertical();
+        }
+
+
+        void DrawWhiteGUI()
+        {
+            Rect rect = GUILayoutUtility.GetRect(0, 100000, 0, 100000);
+            _whiteTreeView.OnGUI(rect);
         }
         #endregion
 
@@ -74,5 +94,11 @@ namespace GameFramework.Taurus
             window.Show();
         }
         #endregion
+
+        #region 内部类
+
+        #endregion
     }
+
+
 }

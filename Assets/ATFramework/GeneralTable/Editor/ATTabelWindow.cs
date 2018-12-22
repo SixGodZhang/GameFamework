@@ -66,7 +66,7 @@ namespace GameFramework.Taurus
 
         Rect ShowLogAreaRect
         {
-            get { return new Rect(0, 0, Screen.width - 60, LogAreaRect.height*10); }
+            get { return new Rect(0, 50, Screen.width - 60, LogAreaRect.height*10); }
         }
 
 
@@ -105,7 +105,7 @@ namespace GameFramework.Taurus
             GUI.color = _normal;
 
             //Debug视图 
-            _scroll_debug_position = GUI.BeginScrollView(LogAreaRect,_scroll_debug_position, ShowLogAreaRect);
+            _scroll_debug_position = GUI.BeginScrollView(LogAreaRect,_scroll_debug_position, ShowLogAreaRect,false,true);
 
             foreach (var log in LogSet)
             {

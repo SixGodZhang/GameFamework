@@ -1,0 +1,10 @@
+using System;
+
+namespace {$Namespace}
+{
+    public partial class BugfixHelper
+    {
+			// delegate register 
+			{$DelegateDefines}
+    }
+}

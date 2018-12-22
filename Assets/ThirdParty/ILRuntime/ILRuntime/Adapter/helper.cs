@@ -1,6 +1,7 @@
 
 using GameFramework.Taurus;
 using GameFramework.Test;
+using MyTestLibrary;
 using System;
 
 namespace ILRuntime
@@ -17,20 +18,18 @@ namespace ILRuntime
 
 			// adaptor register 
                         
+			app.RegisterCrossBindingAdaptor(new TestBaseAdaptor());            
 			app.RegisterCrossBindingAdaptor(new SubMonoBehaviorAdaptor());            
 			app.RegisterCrossBindingAdaptor(new TestClassAdaptor());   
 
 			// interface adaptor register
 			            
 			app.RegisterCrossBindingAdaptor(new IDisposableAdaptor());            
+			app.RegisterCrossBindingAdaptor(new ITestAdaptor());            
 			app.RegisterCrossBindingAdaptor(new IUIViewAdaptor());
 
 			// delegate register 
-						
-			app.DelegateManager.RegisterMethodDelegate<System.Int32,System.String,System.Boolean>();
 			
-			app.DelegateManager.RegisterMethodDelegate<System.Int32,System.String>();
-
 
 			// delegate convertor
             

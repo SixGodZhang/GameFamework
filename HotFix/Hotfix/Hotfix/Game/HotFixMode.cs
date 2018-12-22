@@ -11,6 +11,7 @@
 using System;
 using GameFramework.Taurus;
 using GameFramework.Test;
+using Hotfix.Hotfix.Bugfix;
 using Hotfix.Hotfix.Game;
 
 namespace HotFix.Taurus
@@ -41,18 +42,42 @@ namespace HotFix.Taurus
 
         public override void Start()
         {
-            int a = 10;
-            UnityEngine.Debug.Log(a);
-            string b = "12";
-            UnityEngine.Debug.Log(b);
-            Type type = typeof(int);
-            UnityEngine.Debug.Log(type.ToString());
-            UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.Start() -------------------");
-            TestAction += DoAction;
-            TestAction(1, "1", true);
-            TestDelegate.callBack += HotfixCallback;
-            TestClass tc = new TestClass();
-            tc.DoAction();
+            //hotfix
+            BugfixManager.isOpenHotfix = true;
+            if (BugfixManager.isOpenHotfix)
+            {
+                UnityEngine.Debug.Log("开启热更修复功能!");
+                BugfixManager.RegisterHotfixMethod();
+            }
+
+            new TestMainHotfix().DoAction();
+            //TestClass.TESTNOPARAM += DoAction;
+            //TestClass.TESTNOPARAM();
+            //TestClass.TestFunc += DoFunc;
+            //TestClass.TestFunc();
+            //int a = 10;
+            //UnityEngine.Debug.Log(a);
+            //string b = "12";
+            //UnityEngine.Debug.Log(b);
+            //Type type = typeof(int);
+            //UnityEngine.Debug.Log(type.ToString());
+            //UnityEngine.Debug.Log("-------------------Hotfix: call HotFixMode.Start() -------------------");
+            //TestAction += DoAction;
+            //TestAction(1, "1", true);
+            //TestDelegate.callBack += HotfixCallback;
+            //TestClass tc = new TestClass();
+            //tc.DoAction();
+        }
+
+        private int DoFunc()
+        {
+            UnityEngine.Debug.Log("this is hotfix func");
+            return 0;
+        }
+
+        private void DoAction()
+        {
+            UnityEngine.Debug.Log("this is hotfix action");
         }
 
         private void DoAction(int arg1, string arg2, bool arg3)

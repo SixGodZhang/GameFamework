@@ -16,7 +16,6 @@ namespace CodeGenerationTools.Generator.Base
         protected HashSet<string> KeyWordList = new HashSet<string>();
         protected Dictionary<string, object> KeyDictionary = new Dictionary<string, object>();
 
-
         public virtual bool LoadTemplate(string template)
         {
             Template = template;

@@ -149,16 +149,19 @@ namespace GameFramework.Taurus
             //ILRuntime.Runtime.Generated.CLRBindings.Initialize(Appdomain);
 
             //注册一些委托
-            Appdomain.DelegateManager.RegisterMethodDelegate<System.Object>();
-            Appdomain.DelegateManager.RegisterMethodDelegate<System.UInt16, System.Byte[]>();
-            Appdomain.DelegateManager.RegisterMethodDelegate<System.Object, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
-            Appdomain.DelegateManager.RegisterDelegateConvertor<System.EventHandler<ILRuntime.Runtime.Intepreter.ILTypeInstance>>((act) =>
-            {
-                return new System.EventHandler<ILRuntime.Runtime.Intepreter.ILTypeInstance>((sender, e) =>
-                {
-                    ((Action<System.Object, ILRuntime.Runtime.Intepreter.ILTypeInstance>)act)(sender, e);
-                });
-            });
+            ILRuntime.ILRuntimeHelper.Init(Appdomain);
+            //注册bug修复的一些委托
+            ILRuntime.BugfixHelper.Init(Appdomain);
+            //Appdomain.DelegateManager.RegisterMethodDelegate<System.Object>();
+            //Appdomain.DelegateManager.RegisterMethodDelegate<System.UInt16, System.Byte[]>();
+            //Appdomain.DelegateManager.RegisterMethodDelegate<System.Object, ILRuntime.Runtime.Intepreter.ILTypeInstance>();
+            //Appdomain.DelegateManager.RegisterDelegateConvertor<System.EventHandler<ILRuntime.Runtime.Intepreter.ILTypeInstance>>((act) =>
+            //{
+            //    return new System.EventHandler<ILRuntime.Runtime.Intepreter.ILTypeInstance>((sender, e) =>
+            //    {
+            //        ((Action<System.Object, ILRuntime.Runtime.Intepreter.ILTypeInstance>)act)(sender, e);
+            //    });
+            //});
 
             //注册一些适配器
             //AdapterRegister.RegisterCrossBindingAdaptor(Appdomain);

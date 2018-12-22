@@ -98,7 +98,7 @@ namespace GameFramework.Taurus
                 domain.LoadAssembly(fs);
             }
             //Crossbind Adapter is needed to generate the correct binding code
-            ILRuntime.ILRuntimeHelper.Init(domain);
+            //ILRuntime.ILRuntimeHelper.Init(domain);
 
             ILRuntime.Runtime.CLRBinding.BindingCodeGenerator.GenerateBindingCode(domain, _output_path);
         }

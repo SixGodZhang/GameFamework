@@ -168,7 +168,7 @@ namespace GameFramework.Taurus
 
             List<TreeViewItem> viewItems = new List<TreeViewItem>();
 
-            if (!string.IsNullOrEmpty(searchString))
+            if (!string.IsNullOrEmpty(searchString) && rootItem.children != null)
             {
                 Search(searchString, out viewItems);
             }
@@ -195,8 +195,7 @@ namespace GameFramework.Taurus
 
         protected override void SingleClickedItem(int id)
         {
-            Debug.Log("id: " + id);
-            base.SingleClickedItem(id);
+            base.SingleClickedItem(id);            
         }
 
         private void CellGUI(Rect rect, RowItem<TestUnit> item, ColumnType type, ref RowGUIArgs args)
@@ -239,7 +238,9 @@ namespace GameFramework.Taurus
         void OnSortingChanged(MultiColumnHeader multiColumnHeader)
         {
             var rows = GetRows();
-            SortIfNeeded(rows);
+            if (!SortIfNeeded(rows))
+                return;
+
 
             rows.Clear();
             foreach (var item in rootItem.children)
@@ -269,12 +270,12 @@ namespace GameFramework.Taurus
         /// <summary>
         /// 排序函数
         /// </summary>
-        void SortByMultipleColumns()
+        bool SortByMultipleColumns()
         {
             var sortedColumns = multiColumnHeader.state.sortedColumns;
 
             if (sortedColumns.Length == 0)
-                return;
+                return false;
 
             var rowDatas = rootItem.children.Cast<RowItem<TestUnit>>();
             _ascending = !_ascending;
@@ -282,20 +283,21 @@ namespace GameFramework.Taurus
             orderedQuery.ThenBy(l => l.Data.TestName);
 
             rootItem.children = orderedQuery.Cast<TreeViewItem>().ToList();
+            return true;
         }
 
         /// <summary>
         /// 是否需要排序
         /// </summary>
         /// <param name="rows"></param>
-        void SortIfNeeded(IList<TreeViewItem> rows)
+        bool SortIfNeeded(IList<TreeViewItem> rows)
         {
             if (rows.Count <= 1 || multiColumnHeader.sortedColumnIndex == -1)
-                return;
+                return false;
 
             // Sort the roots of the existing tree items
             SortByMultipleColumns();
-
+            return true;
         }
         #endregion
     }

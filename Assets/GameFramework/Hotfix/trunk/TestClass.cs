@@ -20,6 +20,8 @@ namespace GameFramework.Test
     {
         public string id = "id";
         internal string name = "name";
+        public static Action TESTNOPARAM;
+        public static Func<int> TestFunc;
 
         /// <summary>
         /// 避免这种写法
