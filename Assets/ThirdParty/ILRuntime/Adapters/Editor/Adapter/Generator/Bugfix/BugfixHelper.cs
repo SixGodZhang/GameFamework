@@ -57,6 +57,8 @@ namespace CodeGenerationTools.Generator
             var helperStr = _bugfixDelegateHelper.Generate();
             UnityEngine.Debug.Log(helperStr);
 
+            _out_path = _out_path.Replace("Adapter", "Bugfix");
+
             if (File.Exists(_out_path + "/bugfix_helper.cs"))
                 File.Delete(_out_path + "/bugfix_helper.cs");
 

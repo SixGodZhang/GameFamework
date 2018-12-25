@@ -4,7 +4,7 @@ using GameFramework.Test;
 using MyTestLibrary;
 using System;
 
-namespace ILRuntime
+namespace System
 {
     public class ILRuntimeHelper
     {
@@ -17,7 +17,7 @@ namespace ILRuntime
             }
 
 			// adaptor register 
-                        
+                                   
 			app.RegisterCrossBindingAdaptor(new TestBaseAdaptor());            
 			app.RegisterCrossBindingAdaptor(new SubMonoBehaviorAdaptor());            
 			app.RegisterCrossBindingAdaptor(new TestClassAdaptor());   
