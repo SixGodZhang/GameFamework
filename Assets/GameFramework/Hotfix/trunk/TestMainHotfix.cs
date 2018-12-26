@@ -18,31 +18,35 @@ namespace GameFramework.Taurus
     [AllowHotfix]
     public class TestMainHotfix
     {
+        private void DoPrivateAction()
+        {
+            Debug.Log("private action....");
+        }
+
         public void DoAction()
         {
-            if (BugfixDelegateStatements.GameFramework_Taurus_TestMainHotfix_DoAction_IN__OUT_System_Void__Delegate != null)
-            {
-                BugfixDelegateStatements.GameFramework_Taurus_TestMainHotfix_DoAction_IN__OUT_System_Void__Delegate(this);
-                return;
-            }
-
             Debug.Log("do action in MainProject ......");
         }
 
-        public static void DoAction(int arg)
+        public void DoActionWithParams(string args,int arr)
         {
-            Debug.Log("do action ......");
+            Debug.Log("do action in MainProject ......");
         }
 
-        public static int DoAction(string arg)
-        {
-            return 0;
-        }
+        //public static void DoAction(int arg)
+        //{
+        //    Debug.Log("do action ......");
+        //}
 
-        public static void DoPlay()
-        {
-            Debug.Log("do play ....");
-        }
+        //public static int DoAction(string arg)
+        //{
+        //    return 0;
+        //}
+
+        //public static void DoPlay()
+        //{
+        //    Debug.Log("do play ....");
+        //}
 
         //public static void DoPlay(ref string arg)
         //{

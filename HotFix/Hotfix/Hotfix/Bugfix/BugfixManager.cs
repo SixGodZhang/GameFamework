@@ -12,7 +12,7 @@ namespace Hotfix.Hotfix.Bugfix
         public static bool isOpenHotfix { get; set; }
         public static void RegisterHotfixMethod()
         {
-            ILRuntime.BugfixDelegateStatements.GameFramework_Taurus_TestMainHotfix_DoAction_IN__OUT_System_Void__Delegate += Bugs_GameMain_TestMainHotfix.DoAction;
+            ILRuntime.BugfixDelegateStatements.GameFramework_Taurus_TestMainHotfix_NM_DoActionWithParams_IN_0System_String_0System_Int32_OUT_System_Void__Delegate += Bugs_GameMain_TestMainHotfix.DoAction;
         }
     }
 }

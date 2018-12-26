@@ -14,9 +14,17 @@ using System.Collections.Generic;
 
 namespace GameFramework.Test
 {
+    public class BaseClass
+    {
+        public virtual void SayHello()
+        {
+
+        }
+    }
+
 
     [NeedAdaptor]
-    public class TestClass
+    public class TestClass: BaseClass
     {
         public string id = "id";
         internal string name = "name";

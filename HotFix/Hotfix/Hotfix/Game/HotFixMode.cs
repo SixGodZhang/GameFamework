@@ -13,6 +13,7 @@ using GameFramework.Taurus;
 using GameFramework.Test;
 using Hotfix.Hotfix.Bugfix;
 using Hotfix.Hotfix.Game;
+using ILRuntime;
 
 namespace HotFix.Taurus
 {
@@ -50,7 +51,13 @@ namespace HotFix.Taurus
                 BugfixManager.RegisterHotfixMethod();
             }
 
-            new TestMainHotfix().DoAction();
+            TestMainHotfix mainHotfix = new TestMainHotfix();
+            mainHotfix.DoActionWithParams("11", 11);
+
+            //new TestMainHotfix().DoAction();
+
+
+            //TestMainHotfix.DoPlay();
             //TestClass.TESTNOPARAM += DoAction;
             //TestClass.TESTNOPARAM();
             //TestClass.TestFunc += DoFunc;

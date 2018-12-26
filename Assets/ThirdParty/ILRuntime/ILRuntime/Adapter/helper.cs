@@ -4,7 +4,7 @@ using GameFramework.Test;
 using MyTestLibrary;
 using System;
 
-namespace System
+namespace ILRuntime
 {
     public class ILRuntimeHelper
     {
