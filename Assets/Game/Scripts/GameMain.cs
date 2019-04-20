@@ -53,6 +53,7 @@ namespace GameFramework.Taurus
         IEnumerator Start()
         {
             DontDestroyOnLoad(gameObject);
+
             #region Modules
             StateMG = GameModuleProxy.GetModule<GameStateManager>();
             EventMG = GameModuleProxy.GetModule<EventManager>();
