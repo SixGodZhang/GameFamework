@@ -50,7 +50,7 @@ namespace GameFramework.Taurus
         }
 
         /// <summary>
-        /// 设置第一个状态(泛型)
+        /// 基于所有状态来设置启动状态(泛型)
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="parameters"></param>

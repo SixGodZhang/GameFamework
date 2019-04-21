@@ -3,9 +3,9 @@
 ## 环境配置
 
 ### 机器环境:
-Unity 2018.3.11f1 (64-bit)
-Window10 专业版
-Visual Studio 2017
+- Unity 2018.3.11f1 (64-bit)
+- Window10 专业版
+- Visual Studio 2017
 
 ### 开发环境：
 1. clone GameFamework
@@ -53,5 +53,27 @@ copy Hotfix.dll.mdb $(SolutionDir)Assets\Game\Hotfix\Hotfix.dll.mdb.bytes /y
 	如下:
 	Resource Update Type: Editor
 	UseHotfix：取消勾选
+	
+### 游戏模块介绍
+#### 游戏状态机(GameState Module)
+这里的游戏状态是指游戏处于哪一种状态行为下.目前我在游戏中建立了如下几种状态:
+- LaunchGameState: 游戏启动状态<行为: 1.确定以何种方式下载资源(local,update)>
+- PreloadState: 预加载状态<目前的一个过渡状态,会直接切换到LoadHotfixState状态中>
+- LoadResourceState: 加载资源状态<是直接加载资源? 还是加载ab文件?>
+- CheckResourceState: 对比资源差异
+- LoadHotfixState: 加载热更代码
+
+![GameState](doc_images/GameStateManager.png)
+在Unity Editor下可以观察到State在哪一个阶段: 
+![GameState_ui](doc_images/GameStateManager_ui.png)
+
+#### 游戏生命周期管理(Game Life Manager)
+游戏的生命周期是依赖于Monobehaviour的生命周期. 因为ilruntime的加入,我们不能简单地在热更工程中直接使用Monobehavior,
+所以需要重新定义一个游戏生命周期的方案.
+游戏分不同的模块,每个模块都应该有自己的生命周期,为了统一,使用一个GameModuleProxy来代理所有模块的生命周期,然后再把
+GameModuleProxy放入MonoBehavior的生命周期中即可.
+![GameLife](doc_images/GameLifeManager.png)
+
+
 
 

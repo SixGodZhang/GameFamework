@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace GameFramework.Taurus
 {
-    [GameState(GameStateType.Generanal, Desc: "资源监测")]
+    [GameState(GameStateType.Generanal, Desc: "资源检查")]
     public class CheckResourceState : GameState
     {
         #region 字段&属性
@@ -69,7 +69,7 @@ namespace GameFramework.Taurus
         private const int _RETRYCOUNT = 3;
 
         /// <summary>
-        /// 当前重试的吃素
+        /// 当前重试的次数
         /// </summary>
         private int _currentRetryNum = 0;
 
