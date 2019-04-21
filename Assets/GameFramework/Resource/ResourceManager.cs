@@ -27,6 +27,7 @@ namespace GameFramework.Taurus
         /// 操作资源的对象
         /// </summary>
         private IResourceHelper _resourceHelper;
+
         /// <summary>
         /// 操作对象池的对象
         /// </summary>
@@ -314,40 +315,42 @@ namespace GameFramework.Taurus
     public enum PathType
     {
         /// <summary>
-        /// 只读路径
+        /// 只读路径(Application.streamingAssetsPath)
         /// </summary>
         ReadOnly,
         /// <summary>
-        /// 持久化路径(可读可写)
+        /// 持久化路径(可读可写)<Application.persistentDataPath>
         /// </summary>
         ReadWrite,
         /// <summary>
-        /// 应用程序根目录
+        /// 应用程序根目录<Application.dataPath>
         /// </summary>
         Root,
         /// <summary>
-        /// 缓存目录
+        /// 缓存目录<Application.temporaryCachePath  >
         /// </summary>
         TemporaryCache
 
     }
 
     /// <summary>
-    /// 资源更新的类型
+    /// 资源更新的类型 
+    /// 问题
+    /// 这里有一个Unity的Bug: 无论将ResourceUpdateType的实例初始化什么,永远选取
     /// </summary>
     public enum ResourceUpdateType
     {
         /// <summary>
-        /// 从远程更新资源下来,然后通过AB方式加载
+        /// 直接选择加载资源文件(从给定路径直接加载资源)
         /// </summary>
-        Update,
+        Editor,
         /// <summary>
-        /// 加载本地AB文件
+        /// 从远程更新资源下来,然后通过AB方式加载
         /// </summary>
         Local,
         /// <summary>
-        /// 直接选择加载资源文件
+        /// 加载本地AB文件(从StremingAssets目录下加载资源)
         /// </summary>
-        Editor
+        Update,
     }
 }

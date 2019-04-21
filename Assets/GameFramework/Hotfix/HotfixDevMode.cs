@@ -30,13 +30,13 @@ namespace GameFramework.Taurus
         #region 重载函数
         public bool EnterHotfix(ResourceManager rm)
         {
-            bool result = true;
+            bool result = false;
             HotFixPath? path = HotfixManager.HotFixPath;
             //加载热更代码,此处根据资源管理的加载资源的方式确定加载AB文件还是bytes文件
             result = LoadHotFixCode(rm, path?.DllPath, path?.MdbPath);
             _assemblyEntity = (SubMonoBehavior)_hotfixAssembly.CreateInstance("HotFix.Taurus.HotFixMode");
-            if (_assemblyEntity != null)
-                _assemblyEntity.Start();
+            //if (_assemblyEntity != null)
+            //    _assemblyEntity.Start();
             return result;
         }
 
@@ -93,7 +93,7 @@ namespace GameFramework.Taurus
             //pdb and mdb 没有重命名bytes文件,因此不能被Unity识别,所以只能通过下面的文件流的方式加载
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
-                FileStream fileStream = File.OpenRead(Application.dataPath + "/Game/Hotfix/Hotfix.dll.mdb.bytes");
+                FileStream fileStream = File.OpenRead(mdbPath);
                 if (fileStream != null && fileStream.Length > 0)
                 {
                     byte[] byteData = new byte[fileStream.Length];

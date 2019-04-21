@@ -48,7 +48,7 @@ namespace GameFramework.Taurus
         /// <summary>
         /// 是否使用热更代码
         /// </summary>
-        public bool UseHotFix = true;
+        public bool UseHotFix = false;
 
         IEnumerator Start()
         {
